@@ -3,15 +3,10 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
-# Navigation
-p1 = st.Page(
-    "pages/routine_schedule.py",
-    title = "Routine Schedule",
-    icon = "📅"
+st.write("# Welcome to Routine Schedule")
+
+st.markdown(
+    """
+    We'll display the routines and stats of this user
+    """
 )
-
-pg = st.navigation({
-    "Metrics": [p1]
-})
-
-pg.run()
