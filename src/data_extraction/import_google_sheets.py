@@ -13,53 +13,60 @@ json_key_path = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
 historical_spreadsheet_key = os.getenv('HISTORICAL_SPREADSHEET_KEY')
 spreadsheet_key = os.getenv('SPREADSHEET_KEY')
 local_file_path = os.getenv('LOCAL_FILE_PATH')
-tab_name = os.getenv('TAB_NAME')
+tab_life = os.getenv('TAB_LIFE')
+tab_gym = os.getenv('TAB_GYM')
 
 class ImportGoogleSheets():
 
-    def import_raw_data(self):
+    def __init__(self):
+        # Set the scope and authorize the Google Sheets client
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-
-        # Add credentials to the account
         credentials = ServiceAccountCredentials.from_json_keyfile_name(json_key_path, scope)
-        gc = gspread.authorize(credentials)
+        self.gc = gspread.authorize(credentials)
 
-        # Open the spreadsheets
-        book_historical = gc.open_by_key(historical_spreadsheet_key)
-        book = gc.open_by_key(spreadsheet_key)
+    def fetch_sheet_data(self, spreadsheet_key, tab_name):
+        """Fetches data from a Google Sheets worksheet and returns it as a pandas DataFrame."""
+        try:
+            book = self.gc.open_by_key(spreadsheet_key)
+            worksheet = book.worksheet(tab_name)
+            values = worksheet.get_all_values()
+            return pd.DataFrame(values[1:], columns=values[0])
+        except Exception as e:
+            print(f"Error fetching data from {tab_name}: {e}")
+            return pd.DataFrame()  # Return an empty DataFrame on error
 
-        # Import from Google Sheets
-        worksheet_historical = book_historical.worksheet(tab_name)
-        worksheet = book.worksheet(tab_name)
 
-        values_historical = worksheet_historical.get_all_values()
-        values = worksheet.get_all_values()
+    def import_raw_data(self):
+        # Fetch data from historical and current sheets
+        raw_historical_df = self.fetch_sheet_data(historical_spreadsheet_key, tab_life)
+        raw_df = self.fetch_sheet_data(spreadsheet_key, tab_life)
+        gym_df = self.fetch_sheet_data(spreadsheet_key, tab_gym)
 
-        # Convert to pandas DataFrame
-        raw_historical_df = pd.DataFrame(values_historical[1:], columns=values_historical[0])
-        raw_df = pd.DataFrame(values[1:], columns=values[0])
-
-        # Ignore this placeholder data
+        # Ignore placeholder data in raw_df
         raw_df = raw_df[raw_df['date'] != '1/1/1900']
 
-        # Define the desired data types for the columns
-        desired_dtypes = {
-            'weekday': 'str', 'day_num': 'str', 'date': 'str', 'hour': 'str', 'activity': 'str', 
-            'attribute_1': 'str', 'attribute_2': 'str', 'attribute_3': 'str', 'attribute_4': 'str', 
-            'places': 'str', 'people': 'str', 'notes': 'str', 'adj_day': 'str', 'adj_day_num': 'str', 
-            'adj_date': 'str', 'adj_hour': 'str'
-        }
+        # Ensure data types are consistent
+        raw_historical_df = raw_historical_df.astype(str)
+        raw_df = raw_df.astype(str)
+        gym_df = gym_df.astype(str)
 
-        # Change data types of specified columns
-        raw_historical_df = raw_historical_df.astype(desired_dtypes)
-        raw_df = raw_df.astype(desired_dtypes)
+        # Concatenate historical and new data (check for empty DataFrames to avoid issues)
+        if not raw_historical_df.empty and not raw_df.empty:
+            combined_df = pd.concat([raw_historical_df, raw_df], ignore_index=True)
+        else:
+            combined_df = pd.DataFrame()  # Handle the case when no data is fetched
 
-        # Append raw_df to raw_historical_df using pd.concat
-        combined_df = pd.concat([raw_historical_df, raw_df], ignore_index=True)
+        # Save the combined DataFrame and gym DataFrame to CSV
+        if not combined_df.empty:
+            all_clean_data_path = os.path.join(local_file_path, "data", "raw_data", "raw_rhythm.csv")
+            combined_df.to_csv(all_clean_data_path, index=False)
+        else:
+            print("No data to save for raw_rhythm.csv")
 
+        if not gym_df.empty:
+            gym_data_path = os.path.join(local_file_path, "data", "raw_data", "raw_gym.csv")
+            gym_df.to_csv(gym_data_path, index=False)
+        else:
+            print("No data to save for raw_gym.csv")
 
-        # Save raw data to CSV
-        all_clean_data_path = os.path.join(local_file_path, "data", "raw_data", "raw_rhythm.csv")
-        combined_df.to_csv(all_clean_data_path, index=False)
-
-        return combined_df
+        return combined_df, gym_df

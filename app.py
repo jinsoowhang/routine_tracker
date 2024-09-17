@@ -10,3 +10,4 @@ st.markdown(
     We'll display the routines and stats of this user
     """
 )
+
