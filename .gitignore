@@ -1,3 +1,5 @@
 .env
 src/analytics-prod-359723-f028b56231ee.json
 data/raw_data
+test
+docker-compose.yml
