@@ -10,9 +10,12 @@ class IngestDataToPostgres():
         host = params.host 
         port = params.port
         db = params.db
-        table_name = params.table_name
 
-        csv_name = 'raw_rhythm.csv'
+        rhythm_table_name = 'raw_rhythm'
+        gym_table_name = 'raw_gym'
+
+        rhythm_file_name = f'{rhythm_table_name}.csv'
+        gym_file_name = f'{gym_table_name}.csv'
 
         # download the csv
 
@@ -24,9 +27,14 @@ class IngestDataToPostgres():
         script_dir = os.path.dirname(os.path.abspath(__file__))
 
         # Path to the source directory
-        src_dir = os.path.abspath(os.path.join(script_dir, '..', '..', 'data', 'raw_data', csv_name))
+        src_dir = os.path.abspath(os.path.join(script_dir, '..', '..', 'data', 'raw_data'))
 
-        df = pd.read_csv(src_dir, low_memory=False)
+        # Load rhythm data
+        rhythm_file_path = os.path.join(src_dir, rhythm_file_name)
+        rhythm_df = pd.read_csv(rhythm_file_path, low_memory=False)
+        rhythm_df.to_sql(name=rhythm_table_name, con=engine, if_exists='replace')
 
-        df.to_sql(name=table_name, con=engine, if_exists='replace')
-
+        # Load gym data
+        gym_file_path = os.path.join(src_dir, gym_file_name)
+        gym_df = pd.read_csv(gym_file_path, low_memory=False)
+        gym_df.to_sql(name=gym_table_name, con=engine, if_exists='replace')

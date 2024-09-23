@@ -2,7 +2,7 @@ from src.data_extraction.import_google_sheets import ImportGoogleSheets
 from src.data_extraction.ingest_data_to_postgres import IngestDataToPostgres
 import argparse
 
-def main():
+def main(args):
 
     import_google_sheets = ImportGoogleSheets()
     ingest_data_to_postgres = IngestDataToPostgres()
@@ -26,7 +26,6 @@ if __name__ == '__main__':
     parser.add_argument('--host', help='host for postgres')
     parser.add_argument('--port', help='port for postgres')
     parser.add_argument('--db', help='database name for postgres')
-    parser.add_argument('--table_name', help='name of the table where we will write the results to')
 
     args = parser.parse_args()
 

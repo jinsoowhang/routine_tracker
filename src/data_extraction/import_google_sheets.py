@@ -12,9 +12,13 @@ load_dotenv()
 json_key_path = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
 historical_spreadsheet_key = os.getenv('HISTORICAL_SPREADSHEET_KEY')
 spreadsheet_key = os.getenv('SPREADSHEET_KEY')
-local_file_path = os.getenv('LOCAL_FILE_PATH')
+
 tab_life = os.getenv('TAB_LIFE')
 tab_gym = os.getenv('TAB_GYM')
+
+local_file_path = os.getenv('LOCAL_FILE_PATH')
+docker_file_path = './'
+current_file_path = docker_file_path
 
 class ImportGoogleSheets():
 
@@ -58,13 +62,13 @@ class ImportGoogleSheets():
 
         # Save the combined DataFrame and gym DataFrame to CSV
         if not combined_df.empty:
-            all_clean_data_path = os.path.join(local_file_path, "data", "raw_data", "raw_rhythm.csv")
+            all_clean_data_path = os.path.join(current_file_path, "data", "raw_data", "raw_rhythm.csv")
             combined_df.to_csv(all_clean_data_path, index=False)
         else:
             print("No data to save for raw_rhythm.csv")
 
         if not gym_df.empty:
-            gym_data_path = os.path.join(local_file_path, "data", "raw_data", "raw_gym.csv")
+            gym_data_path = os.path.join(current_file_path, "data", "raw_data", "raw_gym.csv")
             gym_df.to_csv(gym_data_path, index=False)
         else:
             print("No data to save for raw_gym.csv")
