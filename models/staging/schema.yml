@@ -1,0 +1,86 @@
+version: 2
+
+sources:
+  - name: staging
+    database: rhythm
+     # For postgres:
+      #database: production
+    schema: public
+
+      # loaded_at_field: record_loaded_at
+    tables:
+      - name: rhythm
+      - name: gym
+         # freshness:
+           # error_after: {count: 6, period: hour}
+
+models:
+    - name: stg_rhythm
+      description: >
+        15 minute interval time blocks to increase productivity 
+        and minimize cognitive load of remembering what and when activities
+        need to be completed
+      columns:
+          - name: weekday
+            description: Weekday of the date of activity
+          - name: day_num 
+            description: Weekday number of the date of activity
+          - name: date 
+            description: Date of activity
+          - name: hour 
+            description: The time of the activity
+          - name: activity 
+            description: Concatenation of activity from attribute_1 and attribute_2
+          - name: attribute_1 
+            description: Main category of activity
+          - name: attribute_2
+            description: Secondary category of activity
+          - name: attribute_3
+            description: Third category of activity
+          - name: attribute_4
+            description: Fourth category of activity
+          - name: places
+            description: location of the activity
+          - name: people
+            description: people involved in the activity
+          - name: notes
+            description: additional notes of activity
+          - name: adj_day
+            description: adjusted date of activity is 2 hours behind actual date of activity
+          - name: adj_day_num
+            description: 2 hours behind actual adj_day_num
+          - name: adj_date
+            description: 2 hours behind actual adj_date
+          - name: adj_hour
+            description: 2 hours behind actual adj_hour
+          
+    - name: stg_rhythm
+      description: >
+        15 minute interval time blocks to increase productivity 
+        and minimize cognitive load of remembering what and when activities
+        need to be completed
+      columns:
+          - name: Day
+            description: Weekday of the date of activity
+          - name: Day_num 
+            description: Weekday number of the date of activity
+          - name: Date 
+            description: Date of activity
+          - name: Hour 
+            description: The time of the activity
+          - name: Activity 
+            description: Concatenation of activity from Attribute_1 and Attribute_2
+          - name: Attribute_1 
+            description: Main category of activity
+          - name: Attribute_2
+            description: Secondary category of activity
+          - name: Attribute_3
+            description: Third category of activity
+          - name: Attribute_4
+            description: Fourth category of activity
+          - name: Attribute_5
+            description: Fifth category of activity
+          - name: Attribute_6
+            description: Sixth category of activity
+          - name: Notes
+            description: additional notes of activity
