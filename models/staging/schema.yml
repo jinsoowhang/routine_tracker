@@ -15,7 +15,7 @@ sources:
            # error_after: {count: 6, period: hour}
 
 models:
-    - name: stg_staging__rhythm
+    - name: stg__rhythm
       description: >
         15 minute interval time blocks to increase productivity 
         and minimize cognitive load of remembering what and when activities
@@ -54,7 +54,7 @@ models:
           - name: adj_hour
             description: 2 hours behind actual adj_hour
           
-    - name: stg_staging__gym
+    - name: stg__gym
       description: >
         15 minute interval time blocks to increase productivity 
         and minimize cognitive load of remembering what and when activities
