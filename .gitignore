@@ -1,15 +1,25 @@
+# Ignore .env file and other sensitive files
 .env
 src/analytics-prod-359723-f028b56231ee.json
-data/raw_data
-test.py
-docker-compose.yml
+
+# Ignore raw data folders
+data/raw_data/
 rhythm_pgAdmin_data/
-rhythm_portgres_data/
-# Default .gitignore content added by dbt Cloud# you shouldn't commit these into source control
-# these are the default directory names, adjust/add to fit your needs
+rhythm_postgres_data/
+
+# Ignore individual files
+test.py
+
+# Ignore Docker files
+docker-compose.yml
+
+# Ignore dbt generated files
 target/
 dbt_packages/
 logs/
-# end dbt Cloud content
-.streamlit
+
+# Ignore .streamlit folder
+.streamlit/
+
+# Ignore package manager files
 packages.yml
