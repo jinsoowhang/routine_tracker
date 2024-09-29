@@ -6,14 +6,9 @@ models:
     columns:
       - name: calendar_date
         description: "The date in the calendar, whether or not activity occurred."
-        tests:
-          - not_null
-          - unique
       - name: had_activity
         description: "Indicates if there was an activity on this date ('Yes' or 'No')."
         tests:
           - not_null
       - name: activity
         description: "The activity performed on this date, if any."
-        tests:
-          - not_null

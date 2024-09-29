@@ -7,8 +7,8 @@ WITH all_dates AS (
 activity_data AS (
     -- Select the necessary columns from the raw activity data
     SELECT 
-        CAST("Date" AS DATE) AS date_of_activity,
-        "Activity" AS activity
+        CAST(date AS DATE) AS date_of_activity,
+        activity
     FROM {{ ref('stg__gym') }}
 ),
 

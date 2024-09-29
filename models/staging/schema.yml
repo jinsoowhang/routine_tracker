@@ -6,11 +6,10 @@ sources:
      # For postgres:
       #database: production
     schema: public
-
       # loaded_at_field: record_loaded_at
     tables:
-      - name: raw_rhythm
-      - name: raw_gym
+      - name: raw__rhythm
+      - name: raw__gym
          # freshness:
            # error_after: {count: 6, period: hour}
 
@@ -21,6 +20,11 @@ models:
         and minimize cognitive load of remembering what and when activities
         need to be completed
       columns:
+          - name: activity_id
+            description: This is the table's unique ID
+            tests:
+              - not_null
+              - unique
           - name: weekday
             description: Weekday of the date of activity
           - name: day_num 
@@ -60,6 +64,10 @@ models:
         and minimize cognitive load of remembering what and when activities
         need to be completed
       columns:
+          - name: activity_id
+            description: This is the table's unique ID
+            tests:
+              - not_null
           - name: Day
             description: Weekday of the date of activity
           - name: Day_num 

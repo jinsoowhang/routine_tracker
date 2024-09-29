@@ -11,8 +11,8 @@ class IngestDataToPostgres():
         port = params.port
         db = params.db
 
-        rhythm_table_name = 'raw_rhythm'
-        gym_table_name = 'raw_gym'
+        rhythm_table_name = 'raw__rhythm'
+        gym_table_name = 'raw__gym'
 
         rhythm_file_name = f'{rhythm_table_name}.csv'
         gym_file_name = f'{gym_table_name}.csv'

@@ -62,13 +62,13 @@ class ImportGoogleSheets():
 
         # Save the combined DataFrame and gym DataFrame to CSV
         if not combined_df.empty:
-            all_clean_data_path = os.path.join(current_file_path, "data", "raw_data", "raw_rhythm.csv")
+            all_clean_data_path = os.path.join(current_file_path, "data", "raw_data", "raw__rhythm.csv")
             combined_df.to_csv(all_clean_data_path, index=False)
         else:
             print("No data to save for raw_rhythm.csv")
 
         if not gym_df.empty:
-            gym_data_path = os.path.join(current_file_path, "data", "raw_data", "raw_gym.csv")
+            gym_data_path = os.path.join(current_file_path, "data", "raw_data", "raw__gym.csv")
             gym_df.to_csv(gym_data_path, index=False)
         else:
             print("No data to save for raw_gym.csv")
