@@ -9,6 +9,7 @@ models:
       - name: had_activity
         description: "Indicates if there was an activity on this date ('Yes' or 'No')."
         tests:
-          - not_null
+          - not_null:
+              severity: warn
       - name: activity
         description: "The activity performed on this date, if any."

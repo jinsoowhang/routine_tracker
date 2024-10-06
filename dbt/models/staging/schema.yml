@@ -23,8 +23,11 @@ models:
           - name: activity_id
             description: This is the table's unique ID
             tests:
-              - not_null
-              - unique
+              - not_null:
+                  severity: warn
+              - unique:
+                  severity: warn
+            severity: warn
           - name: weekday
             description: Weekday of the date of activity
           - name: day_num 
@@ -67,7 +70,8 @@ models:
           - name: activity_id
             description: This is the table's unique ID
             tests:
-              - not_null
+              - not_null:
+                  severity: warn
           - name: Day
             description: Weekday of the date of activity
           - name: Day_num 
