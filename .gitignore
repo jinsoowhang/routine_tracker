@@ -23,3 +23,6 @@ logs/
 
 # Ignore package manager files
 packages.yml
+
+# Ignore READ files
+READ.md
