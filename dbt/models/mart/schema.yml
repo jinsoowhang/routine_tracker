@@ -2,14 +2,22 @@ version: 2
 
 models:
   - name: fct__all_dates_activity
-    description: "A list of all dates, indicating which dates had activities and which did not."
+    description: "A list of all distinct dates with activity indicators, including additional date attributes."
     columns:
       - name: calendar_date
-        description: "The date in the calendar, whether or not activity occurred."
+        description: "The distinct date in the calendar, indicating each unique date."
+      - name: day_of_week_name_short
+        description: "The short name of the day of the week for the calendar date (e.g., Mon, Tue)."
+      - name: week_start_date
+        description: "The starting date of the week for the calendar date."
+      - name: week_of_year
+        description: "The week number of the year for the calendar date."
+      - name: month_name_short
+        description: "The short name of the month for the calendar date (e.g., Jan, Feb)."
+      - name: quarter_start_date
+        description: "The starting date of the quarter for the calendar date."
       - name: had_activity
         description: "Indicates if there was an activity on this date ('Yes' or 'No')."
         tests:
           - not_null:
               severity: warn
-      - name: activity
-        description: "The activity performed on this date, if any."
