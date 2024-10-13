@@ -11,13 +11,6 @@ conn = st.connection("postgresql", type="sql")
 # Perform query.
 df = conn.query('SELECT * FROM fct__all_dates_activity;', ttl="10m")
 
-##############################
-####### Data Cleaning ########
-##############################
-
-df['calendar_date'] = pd.to_datetime(df['calendar_date'])
-
-
 ###########################
 ####### Title Page ########
 ###########################
@@ -25,6 +18,12 @@ df['calendar_date'] = pd.to_datetime(df['calendar_date'])
 st.title("""📈Gym Routine""")
 
 st.divider()
+
+##############################
+####### Data Cleaning ########
+##############################
+
+df['calendar_date'] = pd.to_datetime(df['calendar_date'])
 
 ########################
 ####### Filters ########
