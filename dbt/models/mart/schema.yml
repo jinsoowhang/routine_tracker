@@ -21,3 +21,40 @@ models:
         tests:
           - not_null:
               severity: warn
+
+  - name: fct__tennis_matches
+    description: "Fact table for tennis matches, including match type (singles/doubles), score, and notes."
+    columns:
+      - name: match_id,
+        description: "The unique identifier for the match."
+      - name: date
+        description: "The date of the tennis match."
+        tests:
+          - not_null
+      - name: match_type
+        description: "The type of match (singles, doubles, or other tennis activity)."
+      - name: score
+        description: "The score of the tennis match."
+      - name: notes
+        description: "Any additional comments or notes about the match."
+      - name: result
+        description: "The result of the match (win or loss)."
+
+  - name: fct__tennis_results
+    description: |
+      This model tracks the results of tennis matches, including whether the player was a teammate or an opponent. 
+      It calculates the result ('Win' or 'Loss') based on the score for each player, and stores the match details 
+      such as match_id, player_name, score, result, and whether the player was a teammate.
+    columns:
+      - name: match_id
+        description: The unique identifier for each tennis match.
+        tests:
+          - not_null
+      - name: player_name
+        description: The name of the player (either a teammate or an opponent).
+      - name: score
+        description: The score of the match (e.g., '6-4').
+      - name: result
+        description: The result of the match for the player ('Win' or 'Loss').
+      - name: is_teammate
+        description: A boolean indicating whether the player is a teammate (TRUE) or an opponent (FALSE).
