@@ -38,15 +38,52 @@ end_dt = st.sidebar.date_input('To Date', value=df['last_active_date'].max())
 
 df = df[(df['calendar_date'] >= pd.to_datetime(start_dt)) & (df['calendar_date'] <= pd.to_datetime(end_dt))]
 
-############################################
-####### Bar Chart: Activity by week ########
-############################################
+####################################################
+####### Stacked Bar Chart: Activity by week ########
+####################################################
 
-activity_by_week_df = df[['week_start_date', 'had_activity']].groupby('week_start_date').sum('had_activity')
+# Activity type filter columns
+list_of_activity_type = [col for col in df.type_of_activity.unique().tolist()]
 
-st.bar_chart(activity_by_week_df)
+activity_filter = st.multiselect('Select Activity', options=list_of_activity_type, default=list_of_activity_type)
 
-st.divider()
+activity_by_week_df = df[df['type_of_activity'].isin(activity_filter)]
+
+# Create the Altair chart
+chart = alt.Chart(activity_by_week_df).mark_bar().encode(
+    x=alt.X('week_start_date:T', title='Week Start Date'),
+    y=alt.Y('had_activity:Q', title='Had Activity'),
+    color=alt.Color('type_of_activity:N', title='Type of Activity')
+).properties(
+    width=800,
+    height=400,
+    title='Stacked Bar Chart of Weekly Activities'
+)
+
+# Display the chart in Streamlit
+st.altair_chart(chart, use_container_width=True)
+
+#############################################
+####### Bar Chart: Count by Activity ########
+#############################################
+
+# Aggregate the count of activities
+activity_count_df = df.groupby('type_of_activity')['had_activity'].sum().reset_index()
+activity_count_df.columns = ['Activity', 'Count']
+
+# Create a horizontal bar chart using Altair
+chart_2 = alt.Chart(activity_count_df).mark_bar().encode(
+    x='Count:Q',
+    y=alt.Y('Activity:N', sort='-x'),
+    color='Activity:N'
+).properties(
+    width=600,
+    height=400,
+    title='Activity Counts'
+)
+
+# Display the chart in Streamlit
+st.altair_chart(chart_2, use_container_width=True)
 
 ####################################
 ####### Tennis Head to Head ########
