@@ -12,7 +12,7 @@ WITH all_dates AS (
 activity_data AS (
     -- Select the necessary columns from the raw activity data
     SELECT 
-        CAST(date AS DATE) AS date_of_activity,
+        TO_DATE(CAST(gym_date AS TEXT), 'YYYYMMDD') AS date_of_activity,
         attribute_6 AS type_of_activity
     FROM {{ ref('stg__gym') }}
 ),
