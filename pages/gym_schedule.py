@@ -93,7 +93,18 @@ st.title("""🎾Tennis Head2Head""")
 
 st.divider()
 
-opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
+tennis_match_type = st.radio(
+    "Select tennis match type",
+    ['singles', 'doubles'],
+    index=None,
+)
+
+if tennis_match_type == 'singles':
+    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 1]
+elif tennis_match_type == 'doubles':
+    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
+else: 
+    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
 
 # Group by player_name and count wins and losses
 player_stats = opponent_doubles_stats.groupby('player_name')['result'].value_counts().unstack(fill_value=0)
