@@ -16,7 +16,7 @@ tennis_results_df = conn.query('SELECT * FROM fct__tennis_results;', ttl="10m")
 ####### Title Page ########
 ###########################
 
-st.title("""📈Gym Routine""")
+st.title("""🏋️Gym Routine""")
 
 st.divider()
 
