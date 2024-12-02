@@ -31,7 +31,7 @@ st.divider()
 ####### Data Cleaning ########
 ##############################
 
-df['date'] = pd.to_datetime(df['date']).dt.date
+df['date'] = pd.to_datetime(df['rhythm_date']).dt.date
 
 ####################
 ####### UDF ########
@@ -309,3 +309,5 @@ axes[3].pie(activity_tracker, labels = activity_tracker.index, autopct='%1.0f%%'
 axes[3].set_title('last '+one_week_ago.strftime('%A'), fontsize = 20, bbox={'facecolor':'0.8', 'pad':5})
 
 st.pyplot()
+
+st.divider()

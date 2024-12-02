@@ -17,20 +17,25 @@ WITH source AS (
         "Notes" AS notes
     FROM {{ source('staging', 'raw__gym') }}
 
+),
+
+results AS (
+    SELECT 
+        {{ dbt_utils.generate_surrogate_key(['date', 'hour', 'activity', 'attribute_2', 'attribute_3', 'attribute_4', 'attribute_5', 'attribute_6']) }} AS activity_id,
+        day,
+        day_num,
+        CAST(TO_CHAR(TO_DATE(date, 'MM/DD/YYYY'), 'YYYYMMDD') AS INTEGER) AS gym_date,
+        hour,
+        activity,
+        attribute_1,
+        attribute_2,
+        attribute_3,
+        attribute_4,
+        attribute_5,
+        attribute_6,
+        notes
+    FROM source
 )
 
-SELECT 
-    {{ dbt_utils.generate_surrogate_key(['date', 'hour', 'activity', 'attribute_2', 'attribute_3', 'attribute_4', 'attribute_5', 'attribute_6']) }} AS activity_id,
-    day,
-    day_num,
-    date,
-    hour,
-    activity,
-    attribute_1,
-    attribute_2,
-    attribute_3,
-    attribute_4,
-    attribute_5,
-    attribute_6,
-    notes
-FROM source
+SELECT *
+FROM results

@@ -1,7 +1,7 @@
 WITH raw AS (
 	SELECT 
         activity_id AS match_id,
-		date,
+		TO_DATE(CAST(gym_date AS TEXT), 'YYYYMMDD') AS gym_date,
 		attribute_2 AS score,
 		attribute_3 AS teammate,
 		TRIM(SPLIT_PART(attribute_4, ',', 1)) AS opponent_1,
@@ -14,7 +14,7 @@ WITH raw AS (
 match_type_cte AS (
 	SELECT 
         match_id,
-		date,
+		gym_date,
 		CASE 
 			WHEN teammate IS NULL AND score IS NULL THEN 'other_tennis_activity'
 			WHEN teammate IS NULL AND opponent_1 IS NOT NULL THEN 'singles' 
@@ -28,7 +28,7 @@ match_type_cte AS (
 results AS (
 	SELECT 
         match_id,
-		date,
+		gym_date,
 		match_type,
 		score,
 		notes
