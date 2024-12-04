@@ -10,7 +10,6 @@ conn = st.connection("postgresql", type="sql")
 
 # Perform query.
 df = conn.query('SELECT * FROM fct__all_dates_activity;', ttl="10m")
-tennis_results_df = conn.query('SELECT * FROM fct__tennis_results;', ttl="10m")
 
 ###########################
 ####### Title Page ########
@@ -85,49 +84,4 @@ chart_2 = alt.Chart(activity_count_df).mark_bar().encode(
 # Display the chart in Streamlit
 st.altair_chart(chart_2, use_container_width=True)
 
-####################################
-####### Tennis Head to Head ########
-####################################
-
-st.title("""🎾Tennis Head2Head""")
-
-st.divider()
-
-tennis_match_type = st.radio(
-    "Select tennis match type",
-    ['singles', 'doubles'],
-    index=None,
-)
-
-if tennis_match_type == 'singles':
-    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 1]
-elif tennis_match_type == 'doubles':
-    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
-else: 
-    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
-
-# Group by player_name and count wins and losses
-player_stats = opponent_doubles_stats.groupby('player_name')['result'].value_counts().unstack(fill_value=0)
-
-# Rename columns to number_of_wins and number_of_losses
-player_stats.columns = ['number_of_losses', 'number_of_wins']  # Assuming result is 'loss' and 'win'
-
-# Calculate the win_loss_difference
-player_stats['win_loss_difference'] = player_stats['number_of_wins'] - player_stats['number_of_losses']
-
-# Calculate win rate
-player_stats['win_rate'] = player_stats['number_of_wins'] / (player_stats['number_of_wins'] + player_stats['number_of_losses'])
-
-# Reset index for better readability
-player_stats = player_stats.reset_index()
-
-# Show the dataframe
-st.write(player_stats)
-######################
-####### Table ########
-######################
-
-st.markdown(f"This is the table")
-
-st.write(df)
 
