@@ -43,10 +43,17 @@ rhythm_df['concatenated_values'] = rhythm_df[columns_to_concatenate].astype(str)
 ########################
 
 # User Input
-last_activity_prompt = st.text_input("Write the last activity 👇")
+last_activity_prompt = st.text_input("Write the activity you want to track in lowercase 👇")
 
 # Filter data by user input
 filter_by_user_prompt = rhythm_df[rhythm_df['concatenated_values'].str.lower().str.contains(last_activity_prompt, na=False)]
+
+# Display the amount of time spent in this activity
+activity_hours_spent = int(len(filter_by_user_prompt)/4)
+activity_days_spent = int(activity_hours_spent/24)
+activity_proportion_spent = int(len(filter_by_user_prompt) / len(rhythm_df) * 100)
+
+st.write(f'All time activity duration: {activity_hours_spent} hours or {activity_days_spent} days, accounts for {activity_proportion_spent}% of total activities')
 
 # Sort by date in descending order
 columns_to_display = ['days_since_rhythm_date', 'rhythm_date', 'weekday', 'activity', 'attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places', 'people', 'notes']
