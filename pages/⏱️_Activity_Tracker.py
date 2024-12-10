@@ -38,34 +38,6 @@ rhythm_df['concatenated_values'] = rhythm_df[columns_to_concatenate].astype(str)
     lambda row: ' | '.join(row.values), axis=1
 )
 
-####################################
-####### Activity Proportion ########
-####################################
-
-st.title("""High Level Activities""")
-
-# User chooses dimensions
-activity_hierarchy = st.selectbox(
-    "Select activity hierarchy",
-    ['attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places']
-)
-
-# Calculate proportions and total hours/days
-activity_proportion_df = rhythm_df[['activity_id', activity_hierarchy]].groupby(activity_hierarchy).size().reset_index(name='count')
-
-# Add total hours and days
-activity_proportion_df['total_hours'] = round(activity_proportion_df['count'] / 4)
-activity_proportion_df['total_days'] = round(activity_proportion_df['total_hours'] / 24)
-activity_proportion_df['proportion (%)'] = round(activity_proportion_df['count'] / activity_proportion_df['count'].sum() * 100, 1)
-
-# Reorder columns
-activity_proportion_df = activity_proportion_df[[activity_hierarchy, 'total_hours', 'total_days', 'proportion (%)']]
-
-# Display in Streamlit
-st.write(activity_proportion_df)
-
-st.divider()
-
 ##############################################
 ####### Last Occurrence of Activity X ########
 ##############################################
@@ -96,3 +68,29 @@ sorted_prompt = filter_by_user_prompt.sort_values(by='rhythm_date', ascending=Fa
 # Display the dataframe
 st.dataframe(sorted_prompt, use_container_width=True)
 
+####################################
+####### Activity Proportion ########
+####################################
+
+st.title("""High Level Activities""")
+
+activity_hierarchy = st.selectbox(
+    "Select activity hierarchy",
+    ['attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places']
+)
+
+# Calculate proportions and total hours/days
+activity_proportion_df = rhythm_df[['activity_id', activity_hierarchy]].groupby(activity_hierarchy).size().reset_index(name='count')
+
+# Add total hours and days
+activity_proportion_df['total_hours'] = round(activity_proportion_df['count'] / 4)
+activity_proportion_df['total_days'] = round(activity_proportion_df['total_hours'] / 24)
+activity_proportion_df['proportion (%)'] = round(activity_proportion_df['count'] / activity_proportion_df['count'].sum() * 100, 1)
+
+# Reorder columns
+activity_proportion_df = activity_proportion_df[[activity_hierarchy, 'total_hours', 'total_days', 'proportion (%)']]
+
+# Display in Streamlit
+st.write(activity_proportion_df)
+    
+st.divider()

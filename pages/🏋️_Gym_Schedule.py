@@ -32,7 +32,7 @@ df['calendar_date'] = pd.to_datetime(df['calendar_date'])
 df['first_active_date'] = df['calendar_date']
 start_dt = st.sidebar.date_input('From Date', value=df['first_active_date'].min())
 
-df['last_active_date'] = df['calendar_date']
+df['last_active_date'] = df[df['had_activity']==1]['calendar_date']
 end_dt = st.sidebar.date_input('To Date', value=df['last_active_date'].max())
 
 df = df[(df['calendar_date'] >= pd.to_datetime(start_dt)) & (df['calendar_date'] <= pd.to_datetime(end_dt))]
@@ -50,7 +50,7 @@ activity_by_week_df = df[df['type_of_activity'].isin(activity_filter)]
 
 # Create the Altair chart
 chart = alt.Chart(activity_by_week_df).mark_bar().encode(
-    x=alt.X('week_start_date:T', title='Week Start Date'),
+    x=alt.X('week_start_date:T', title='Week Start Date', axis=alt.Axis(format='%b %d %y')),  # Format as "Jan 2024"
     y=alt.Y('had_activity:Q', title='Had Activity'),
     color=alt.Color('type_of_activity:N', title='Type of Activity')
 ).properties(
