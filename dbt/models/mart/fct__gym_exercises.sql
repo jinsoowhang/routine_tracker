@@ -1,8 +1,8 @@
 WITH raw AS (
     SELECT 
         TO_DATE(gym_date::TEXT, 'YYYYMMDD') AS gym_date,
-        attribute_1 AS gym_exercise_type,
-        attribute_2 AS gym_exercise_weight
+        TRIM(attribute_1) AS gym_exercise_type,
+        TRIM(attribute_2) AS gym_exercise_weight
     FROM {{ ref('stg__gym') }}  -- Reference the staging model
     WHERE attribute_6 = 'gym'
 ),

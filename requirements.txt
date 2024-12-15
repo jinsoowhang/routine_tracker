@@ -6,3 +6,4 @@ july==0.1.3
 matplotlib
 seaborn
 openai
+streamlit==1.40.0
