@@ -22,12 +22,24 @@ models:
           - not_null:
               severity: warn
 
+  - name: fct__gym_exercises
+    description: "A fact table tracking gym exercises, including the exercise type, weight, and associated dates."
+    columns:
+      - name: gym_date
+        description: "The date the gym exercise was performed."
+      - name: gym_exercise_type
+        description: "The type of exercise performed at the gym (e.g., squat, deadlift)."
+      - name: gym_exercise_weight
+        description: "The weight used for the exercise, if applicable."
+      - name: attribute_6
+        description: "The attribute used to filter for gym-related data. Always equals 'gym'."
+
   - name: fct__tennis_matches
     description: "Fact table for tennis matches, including match type (singles/doubles), score, and notes."
     columns:
       - name: match_id,
         description: "The unique identifier for the match."
-      - name: date
+      - name: gym_date
         description: "The date of the tennis match."
         tests:
           - not_null
