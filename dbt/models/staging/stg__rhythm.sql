@@ -19,9 +19,9 @@ results AS (
         places,
         people,
         notes,
-        adj_day,
+        adj_day AS adj_weekday,
         adj_day_num,
-        adj_date,
+        CAST(TO_CHAR(TO_DATE(adj_date, 'MM/DD/YYYY'), 'YYYYMMDD') AS INTEGER) AS adj_rhythm_date,
         adj_hour
     FROM source
 )

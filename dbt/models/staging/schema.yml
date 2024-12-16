@@ -52,7 +52,7 @@ models:
             description: people involved in the activity
           - name: notes
             description: additional notes of activity
-          - name: adj_day
+          - name: adj_weekday
             description: adjusted date of activity is 2 hours behind actual date of activity
           - name: adj_day_num
             description: 2 hours behind actual adj_day_num

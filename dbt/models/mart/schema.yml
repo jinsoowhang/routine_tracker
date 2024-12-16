@@ -22,6 +22,33 @@ models:
           - not_null:
               severity: warn
 
+  - name: fct__daily_activity_scores
+    description: |
+      This model calculates the daily activity scores based on predefined weights for various activities. 
+      It aggregates scores for all activities performed on a given day, providing a measure of daily productivity.
+      It is using adjusted dates because the sleep time is usually around 10PM. So, days start from 10PM instead of midnight.
+    columns:
+      - name: adj_rhythm_date
+        description: |
+          The date of the activities, formatted as 'YYYY-MM-DD'. 
+          This serves as the primary time dimension for tracking daily scores.
+        tests:
+          - not_null:
+              severity: warn
+      - name: adj_weekday
+        description: |
+          The name of the day corresponding to the adj_rhythm_date (e.g., Monday, Tuesday).
+      - name: adj_day_num
+        description: |
+          The numeric representation of the day within the week (e.g., 1 for Monday, 7 for Sunday).
+      - name: total_daily_score
+        description: |
+          The aggregated activity score for all activities performed on a given date. 
+          Higher scores indicate greater productivity or importance based on weighted activities.
+        tests:
+          - not_null:
+              severity: warn
+
   - name: fct__gym_exercises
     description: "A fact table tracking gym exercises, including the exercise type, weight, and associated dates."
     columns:
