@@ -70,3 +70,20 @@ models:
         description: The result of the match for the player ('Win' or 'Loss').
       - name: is_teammate
         description: A boolean indicating whether the player is a teammate (TRUE) or an opponent (FALSE).
+
+  - name: fct__weight_tracking
+    description: |
+      This model tracks body weight measurements over time, providing insights into weight trends and changes for fitness or health monitoring.
+    columns:
+      - name: weigh_in_date
+        description: |
+          The date when the body weight was recorded. This helps in tracking weight progression over time.
+        tests:
+          - not_null:
+              severity: warn
+      - name: body_weight
+        description: |
+          The body weight recorded during the weigh-in, measured in pounds (lbs).
+        tests:
+          - not_null:
+              severity: warn
