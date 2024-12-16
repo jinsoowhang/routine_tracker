@@ -38,6 +38,18 @@ rhythm_df['concatenated_values'] = rhythm_df[columns_to_concatenate].astype(str)
     lambda row: ' | '.join(row.values), axis=1
 )
 
+########################
+####### Filters ########
+########################
+
+rhythm_df['first_active_date'] = rhythm_df['rhythm_date']
+start_dt = st.sidebar.date_input('From Date', value=rhythm_df['first_active_date'].min())
+
+rhythm_df['last_active_date'] = rhythm_df['rhythm_date']
+end_dt = st.sidebar.date_input('To Date', value=rhythm_df['last_active_date'].max())
+
+rhythm_df = rhythm_df[(rhythm_df['rhythm_date'] >= pd.to_datetime(start_dt)) & (rhythm_df['rhythm_date'] <= pd.to_datetime(end_dt))]
+
 ##############################################
 ####### Last Occurrence of Activity X ########
 ##############################################
