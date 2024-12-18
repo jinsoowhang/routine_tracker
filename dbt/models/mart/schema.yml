@@ -35,6 +35,9 @@ models:
         tests:
           - not_null:
               severity: warn
+      - name: adj_year_week_num
+        description: |
+          The date formatted as Year-Week Number (e.g., 2024-W1)
       - name: adj_weekday
         description: |
           The name of the day corresponding to the adj_rhythm_date (e.g., Monday, Tuesday).
