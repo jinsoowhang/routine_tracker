@@ -19,15 +19,12 @@ st.title("""🌱Habit Tracker""")
 
 st.divider()
 
-##########################
-####### Variables ########
-##########################
+##############################
+####### Data Cleaning ########
+##############################
 
-# Convert to date
-today_date = dt.today().date()
+# Convert to datetime
 daily_activity_scores_df['adj_rhythm_date'] = pd.to_datetime(daily_activity_scores_df['adj_rhythm_date'], format='%Y%m%d')
-
-today_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == today_date]['total_daily_score'].iloc[0]
 
 ########################
 ####### Filters ########
@@ -47,14 +44,52 @@ daily_activity_scores_df = daily_activity_scores_df[
     (daily_activity_scores_df['adj_rhythm_date'] <= pd.to_datetime(end_dt))
 ]
 
+
+##########################
+####### Variables ########
+##########################
+
+# Group by adj_year_week_num to get weekly scores
+weekly_activity_scores_df = daily_activity_scores_df.groupby('adj_year_week_num')['total_daily_score'].mean()
+
+# Today vs One week ago scores
+today_date = dt.today().date()
+one_week_ago_date = today_date - timedelta(days=7)
+today_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == today_date]['total_daily_score'].iloc[0]
+one_week_ago_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == one_week_ago_date]['total_daily_score'].iloc[0]
+
+# This week vs Last week score
+this_week_num = today_date.strftime("%Y-W%U")  # Format as YYYY-Wxx
+last_week_num = (today_date - timedelta(weeks=1)).strftime("%Y-W%U")  # Previous week in YYYY-Wxx format
+this_week_score = weekly_activity_scores_df.loc[this_week_num] if this_week_num in weekly_activity_scores_df.index else None
+last_week_score = weekly_activity_scores_df.loc[last_week_num] if last_week_num in weekly_activity_scores_df.index else None
+# Round the scores to 1 decimal place
+this_week_score_rounded = round(this_week_score, 1) if this_week_score is not None else None
+last_week_score_rounded = round(last_week_score, 1) if last_week_score is not None else None
+
 ###############################
 ####### Activity Score ########
 ###############################
 
 st.markdown("## Activity Score")
 
-st.write(f"Today's score:          {today_score}")
+# Today vs One week ago scores
+st.markdown(
+    f"Today's score is <b style='color:green; font-size:35px;'>{today_score}</b> and last week's score was <b style='color:orange; font-size:35px;'>{one_week_ago_score}</b>",
+    unsafe_allow_html=True
+)
 
+# This week vs Last week score with conditional display
+if this_week_score_rounded is not None and last_week_score_rounded is not None:
+    st.markdown(
+        f"This week's score is <b style='color:green; font-size:35px;'>{this_week_score_rounded}</b> and "
+        f"last week's score was <b style='color:orange; font-size:35px;'>{last_week_score_rounded}</b>",
+        unsafe_allow_html=True
+    )
+else:
+    st.markdown("One or both of the weekly scores are not available.")
+
+# Line Chart for daily score over time
 chart_1 = alt.Chart(daily_activity_scores_df).mark_line().encode(
     x = alt.X('adj_rhythm_date'),
     y = alt.Y('total_daily_score', scale=alt.Scale(domain=[0, 120]))
@@ -62,6 +97,36 @@ chart_1 = alt.Chart(daily_activity_scores_df).mark_line().encode(
 
 # Display the chart in Streamlit
 st.altair_chart(chart_1, use_container_width=True)
+
+st.divider()
+
+######################################
+####### Overall Activity KPIs ########
+######################################
+
+st.markdown("## Overall Activity KPIs")
+
+# Create two columns
+col1, col2 = st.columns(2)
+
+# Column 1: Overall Activity KPIs and Average Score by Day
+with col1:
+    st.markdown("##### Average score by day")
+    result = (
+        daily_activity_scores_df.groupby(['adj_weekday', 'adj_day_num'])['total_daily_score']
+        .mean()
+        .reset_index()  # Convert the Series to a DataFrame
+        .sort_values(by='adj_day_num').reset_index()  # Sort by 'adj_day_num'
+    )
+    st.dataframe(result[['adj_weekday', 'total_daily_score']])
+
+# Column 2: Average Score by Week
+with col2:
+    st.markdown("##### Average score by week")
+    st.dataframe(weekly_activity_scores_df)
+
+# Divider below the columns
+st.divider()
 
 #########################
 ####### Appendix ########

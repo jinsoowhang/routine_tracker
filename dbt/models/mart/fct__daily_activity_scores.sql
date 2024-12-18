@@ -1,16 +1,20 @@
 WITH raw AS (
     SELECT 
         TO_DATE(adj_rhythm_date::TEXT, 'YYYYMMDD') AS adj_rhythm_date,
+		CONCAT(year_number, '-W', week_of_year) AS adj_year_week_num,
         adj_weekday,
         adj_day_num,
         attribute_1	
-    FROM {{ ref('stg__rhythm') }}  -- Reference the staging model
+    FROM {{ ref('stg__rhythm') }} rhythm -- Reference the staging model
+	JOIN {{ ref('dim__dates') }} dates
+	  ON TO_DATE(rhythm.adj_rhythm_date::TEXT, 'YYYYMMDD') = dates.date_day
 	WHERE adj_rhythm_date >= 20220101
 ),
 
 activity_score_cte AS (
 	SELECT
 		adj_rhythm_date,
+		adj_year_week_num,
 		adj_weekday,
 		adj_day_num,
 		attribute_1,
@@ -49,17 +53,19 @@ activity_score_cte AS (
 agg_score_cte AS (
 	SELECT 
 		adj_rhythm_date,
+		adj_year_week_num,
 		adj_weekday,
 		adj_day_num,
 		SUM(activity_score) AS total_daily_score
 	FROM activity_score_cte
-	GROUP BY adj_rhythm_date, adj_weekday, adj_day_num
+	GROUP BY adj_rhythm_date, adj_year_week_num, adj_weekday, adj_day_num
 	ORDER BY adj_rhythm_date
 ),
 
 results AS (
 	SELECT 
 		adj_rhythm_date,
+		adj_year_week_num,
 		adj_weekday,
 		adj_day_num,
 		total_daily_score
