@@ -25,9 +25,11 @@ st.divider()
 
 # Convert to date
 today_date = dt.today().date()
+one_week_ago_date = today_date - timedelta(days=7)
 daily_activity_scores_df['adj_rhythm_date'] = pd.to_datetime(daily_activity_scores_df['adj_rhythm_date'], format='%Y%m%d')
 
 today_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == today_date]['total_daily_score'].iloc[0]
+one_week_ago_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == one_week_ago_date]['total_daily_score'].iloc[0]
 
 ########################
 ####### Filters ########
@@ -54,6 +56,7 @@ daily_activity_scores_df = daily_activity_scores_df[
 st.markdown("## Activity Score")
 
 st.write(f"Today's score:          {today_score}")
+st.write(f"One week ago score:          {one_week_ago_score}")
 
 chart_1 = alt.Chart(daily_activity_scores_df).mark_line().encode(
     x = alt.X('adj_rhythm_date'),
@@ -62,6 +65,27 @@ chart_1 = alt.Chart(daily_activity_scores_df).mark_line().encode(
 
 # Display the chart in Streamlit
 st.altair_chart(chart_1, use_container_width=True)
+
+st.divider()
+
+######################################
+####### Overall Activity KPIs ########
+######################################
+
+st.markdown("## Overall Activity KPIs")
+
+st.markdown("##### Average score by day")
+
+result = (
+    daily_activity_scores_df.groupby(['adj_weekday', 'adj_day_num'])['total_daily_score']
+    .mean()
+    .reset_index()  # Convert the Series to a DataFrame
+    .sort_values(by='adj_day_num').reset_index()  # Sort by 'adj_day_num'
+)
+
+st.write(result[['adj_weekday', 'total_daily_score']])
+
+st.divider()
 
 #########################
 ####### Appendix ########
