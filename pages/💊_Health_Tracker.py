@@ -40,5 +40,3 @@ st.markdown("## Last 5 Weigh Ins")
 
 # Display the table
 st.dataframe(body_weight_df.sort_values(by='weigh_in_date', ascending=False).head(5))
-
-st.write('test')

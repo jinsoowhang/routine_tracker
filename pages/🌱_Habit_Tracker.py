@@ -89,15 +89,31 @@ if this_week_score_rounded is not None and last_week_score_rounded is not None:
 else:
     st.markdown("One or both of the weekly scores are not available.")
 
+st.divider()
+
 # Line Chart for daily score over time
-chart_1 = alt.Chart(daily_activity_scores_df).mark_line().encode(
+line_chart = alt.Chart(daily_activity_scores_df).mark_line().encode(
     x = alt.X('adj_rhythm_date'),
-    y = alt.Y('total_daily_score', scale=alt.Scale(domain=[0, 120]))
+    y = alt.Y('total_daily_score', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
+    tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'total_daily_score:Q']  # Add adj_year_week_num to the tooltip
+)
+
+# Text labels
+labels = alt.Chart(daily_activity_scores_df).mark_text(align='left', dx=-10, dy=-10, fontSize=12, color='white').encode(
+    x=alt.X('adj_rhythm_date:T'),
+    y=alt.Y('total_daily_score:Q'),
+    text=alt.Text('total_daily_score:Q', format=".1f")  # Round the score to 1 decimal place
+)
+
+# Combine the line chart and labels with a title
+chart_1 = (line_chart + labels).properties(
+    title="Daily Score Over Time",
+    width=800,  # Optional: Adjust width
+    height=400  # Optional: Adjust height
 )
 
 # Display the chart in Streamlit
 st.altair_chart(chart_1, use_container_width=True)
-
 st.divider()
 
 ######################################

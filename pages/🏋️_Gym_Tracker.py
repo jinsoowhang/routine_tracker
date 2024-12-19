@@ -5,6 +5,8 @@ import altair as alt
 from datetime import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
+from datetime import datetime as dt
+from datetime import timedelta
 
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
@@ -34,13 +36,19 @@ df['calendar_date'] = pd.to_datetime(df['calendar_date'])
 ####### Filters ########
 ########################
 
-df['first_active_date'] = df['calendar_date']
-start_dt = st.sidebar.date_input('From Date', value=df['first_active_date'].min())
+# Calculate the default start and end dates
+default_end_date = dt.today()
+default_start_date = default_end_date - timedelta(days=30)
 
-df['last_active_date'] = df[df['had_activity']==1]['calendar_date']
-end_dt = st.sidebar.date_input('To Date', value=df['last_active_date'].max())
+# Add date input widgets with default values
+start_dt = st.sidebar.date_input('From Date', value=default_start_date)
+end_dt = st.sidebar.date_input('To Date', value=default_end_date)
 
-df = df[(df['calendar_date'] >= pd.to_datetime(start_dt)) & (df['calendar_date'] <= pd.to_datetime(end_dt))]
+# Filter the DataFrame to include only the selected date range
+df = df[
+    (df['calendar_date'] >= pd.to_datetime(start_dt)) &
+    (df['calendar_date'] <= pd.to_datetime(end_dt))
+]
 
 ####################################################
 ####### Stacked Bar Chart: Activity by week ########
