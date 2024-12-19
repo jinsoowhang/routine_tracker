@@ -4,6 +4,8 @@ import numpy as np
 import altair as alt
 from datetime import datetime
 import matplotlib.pyplot as plt
+from datetime import datetime as dt
+from datetime import timedelta
 
 st.set_page_config(layout='wide')
 
@@ -38,17 +40,29 @@ rhythm_df['concatenated_values'] = rhythm_df[columns_to_concatenate].astype(str)
     lambda row: ' | '.join(row.values), axis=1
 )
 
+##############################
+####### Data Cleaning ########
+##############################
+
+# Convert to datetime
+rhythm_df['rhythm_date'] = pd.to_datetime(rhythm_df['rhythm_date'], format='%Y%m%d')
+
 ########################
 ####### Filters ########
 ########################
 
-rhythm_df['first_active_date'] = rhythm_df['rhythm_date']
-start_dt = st.sidebar.date_input('From Date', value=rhythm_df['first_active_date'].min())
+default_end_date = dt.today()
+default_start_date = default_end_date - timedelta(days=30)
 
-rhythm_df['last_active_date'] = rhythm_df['rhythm_date']
-end_dt = st.sidebar.date_input('To Date', value=rhythm_df['last_active_date'].max())
+# Add date input widgets with default values
+start_dt = st.sidebar.date_input('From Date', value=default_start_date)
+end_dt = st.sidebar.date_input('To Date', value=default_end_date)
 
-rhythm_df = rhythm_df[(rhythm_df['rhythm_date'] >= pd.to_datetime(start_dt)) & (rhythm_df['rhythm_date'] <= pd.to_datetime(end_dt))]
+# Filter the DataFrame to include only the selected date range
+rhythm_df = rhythm_df[
+    (rhythm_df['rhythm_date'] >= pd.to_datetime(start_dt)) &
+    (rhythm_df['rhythm_date'] <= pd.to_datetime(end_dt))
+]
 
 ##############################################
 ####### Last Occurrence of Activity X ########
@@ -75,10 +89,26 @@ else:
 # Sort by date in descending order
 columns_to_display = ['days_since_rhythm_date', 'rhythm_date', 'weekday', 'activity', 'attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places', 'people', 'notes']
 
-sorted_prompt = filter_by_user_prompt.sort_values(by='rhythm_date', ascending=False)[columns_to_display].drop_duplicates()
+sorted_prompt = filter_by_user_prompt.sort_values(by='rhythm_date', ascending=False)[columns_to_display]
 
 # Display the dataframe
 st.dataframe(sorted_prompt, use_container_width=True)
+
+# Example data (replace with your actual DataFrame)
+# rhythm_date and attribute_1 should exist in your dataframe
+stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar().encode(
+    x=alt.X('rhythm_date:T', title='Rhythm Date'),
+    y=alt.Y('count()', title='Count of Activities'),
+    color=alt.Color('attribute_1:N', title='Activity Type'),  # Stacks by activity type
+    tooltip=['rhythm_date:T', 'attribute_1:N', 'count()']  # Add tooltips
+).properties(
+    title='Activity Distribution by Date',
+    width=800,
+    height=400
+)
+
+# Display the chart in Streamlit
+st.altair_chart(stacked_bar_chart, use_container_width=True)
 
 ####################################
 ####### Activity Proportion ########
