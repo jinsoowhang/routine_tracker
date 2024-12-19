@@ -92,8 +92,11 @@ else:
 # Line Chart for daily score over time
 chart_1 = alt.Chart(daily_activity_scores_df).mark_line().encode(
     x = alt.X('adj_rhythm_date'),
-    y = alt.Y('total_daily_score', scale=alt.Scale(domain=[0, 120]))
+    y = alt.Y('total_daily_score', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
+    tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'total_daily_score:Q']  # Add adj_year_week_num to the tooltip
 )
+
+st.dataframe(daily_activity_scores_df)
 
 # Display the chart in Streamlit
 st.altair_chart(chart_1, use_container_width=True)

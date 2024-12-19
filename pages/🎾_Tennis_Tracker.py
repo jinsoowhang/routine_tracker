@@ -52,13 +52,10 @@ player_stats.columns = ['number_of_losses', 'number_of_wins']  # Assuming result
 player_stats['win_loss_difference'] = player_stats['number_of_wins'] - player_stats['number_of_losses']
 
 # Calculate win rate and format as percentage
-player_stats['win_rate'] = (
+player_stats['win_rate (%)'] = (
     player_stats['number_of_wins'] / 
     (player_stats['number_of_wins'] + player_stats['number_of_losses'])
 ) * 100
-
-# Format win rate to two decimal places
-player_stats['win_rate'] = player_stats['win_rate'].round(1).astype(str) + '%'
 
 # Reset index for better readability
 player_stats = player_stats.reset_index()
