@@ -89,6 +89,8 @@ if this_week_score_rounded is not None and last_week_score_rounded is not None:
 else:
     st.markdown("One or both of the weekly scores are not available.")
 
+st.divider()
+
 # Line Chart for daily score over time
 line_chart = alt.Chart(daily_activity_scores_df).mark_line().encode(
     x = alt.X('adj_rhythm_date'),
@@ -103,8 +105,12 @@ labels = alt.Chart(daily_activity_scores_df).mark_text(align='left', dx=-10, dy=
     text=alt.Text('total_daily_score:Q', format=".1f")  # Round the score to 1 decimal place
 )
 
-# Combine the line chart and labels
-chart_1 = line_chart + labels
+# Combine the line chart and labels with a title
+chart_1 = (line_chart + labels).properties(
+    title="Daily Score Over Time",
+    width=800,  # Optional: Adjust width
+    height=400  # Optional: Adjust height
+)
 
 # Display the chart in Streamlit
 st.altair_chart(chart_1, use_container_width=True)
