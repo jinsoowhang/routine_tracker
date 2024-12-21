@@ -117,6 +117,35 @@ st.altair_chart(chart_1, use_container_width=True)
 st.divider()
 
 ######################################
+####### Weekly Scores by Day ########
+######################################
+
+# Heatmap to represent the scores
+heatmap = alt.Chart(daily_activity_scores_df).mark_rect().encode(
+    x=alt.X('adj_weekday:N', title='Weekday'),
+    y=alt.Y('adj_year_week_num:N', title='Year-Week'),
+    color=alt.Color('total_daily_score:Q', scale=alt.Scale(scheme='viridis'), title='Daily Score'),
+    tooltip=['adj_year_week_num:N', 'adj_weekday:N', 'total_daily_score:Q']  # Tooltip for details
+)
+
+# Text labels for each grid cell
+text = alt.Chart(daily_activity_scores_df).mark_text(align='center', baseline='middle', fontSize=12, color='white').encode(
+    x=alt.X('adj_weekday:N'),
+    y=alt.Y('adj_year_week_num:N'),
+    text=alt.Text('total_daily_score:Q', format=".0f")  # Format to display whole numbers
+)
+
+# Combine the heatmap and text labels
+grid_chart = (heatmap + text).properties(
+    title="Weekly Scores by Day",
+    width=800,  # Adjust width for better readability
+    height=400   # Adjust height for better readability
+)
+
+# Display the chart in Streamlit
+st.altair_chart(grid_chart, use_container_width=True)
+
+######################################
 ####### Overall Activity KPIs ########
 ######################################
 
