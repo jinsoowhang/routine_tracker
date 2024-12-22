@@ -94,17 +94,33 @@ sorted_prompt = filter_by_user_prompt.sort_values(by='rhythm_date', ascending=Fa
 # Display the dataframe
 st.dataframe(sorted_prompt, use_container_width=True)
 
-# Example data (replace with your actual DataFrame)
 # rhythm_date and attribute_1 should exist in your dataframe
-stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar().encode(
-    x=alt.X('rhythm_date:T', title='Rhythm Date'),
-    y=alt.Y('count()', title='Count of Activities'),
-    color=alt.Color('attribute_1:N', title='Activity Type'),  # Stacks by activity type
-    tooltip=['rhythm_date:T', 'attribute_1:N', 'count()']  # Add tooltips
+stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar(size=30).encode(
+    x=alt.X(
+        'rhythm_date:T', 
+        title='Rhythm Date'
+    ),
+    y=alt.Y(
+        'sum(hours):Q', 
+        title='Total Time (Hours)'  # Aggregate hours
+    ),
+    color=alt.Color(
+        'attribute_1:N', 
+        title='Activity Type',
+        sort=["sleep", "work", "leisure", "hangout", "eat", "productive", "commute", "meet", "exercise", "study", "hygiene", "church", "travel", "clean", "wake_up", "learn", "walk", "vacation", "read", "cook", "call", "sick", "grocery", "love", "side_hustle", "shopping"]
+    ),
+    tooltip=[
+        'rhythm_date:T', 
+        'attribute_1:N', 
+        alt.Tooltip('sum(hours):Q', title='Total Time (Hours)', format=".2f"),  # Tooltip for hours
+        alt.Tooltip('weekday:O', title='Weekday')  # Add weekday to tooltip
+    ]
+).transform_calculate(
+    hours="15 / 60"  # Each count represents 15 minutes, converted to hours
 ).properties(
     title='Activity Distribution by Date',
     width=800,
-    height=400
+    height=600
 )
 
 # Display the chart in Streamlit
