@@ -74,18 +74,42 @@ last_week_score_rounded = round(last_week_score, 1) if last_week_score is not No
 st.markdown("## Activity Score")
 
 # Today vs One week ago scores
-st.markdown(
-    f"Today's score is <b style='color:green; font-size:35px;'>{today_score}</b> and last week's score was <b style='color:orange; font-size:35px;'>{one_week_ago_score}</b>",
-    unsafe_allow_html=True
-)
+
+if today_score > one_week_ago_score:
+    st.markdown(
+        f"Today's score is <b style='color:yellow; font-size:35px;'>{today_score}</b> and "
+        f"last week's score was <b style='color:orange; font-size:35px;'>{one_week_ago_score}"
+        f" <b style='color:green; font-size:25px;'>(🔼{round(today_score-one_week_ago_score, 1)})</b>",
+        unsafe_allow_html=True
+    )
+elif today_score < one_week_ago_score:
+    st.markdown(
+        f"Today's score is <b style='color:yellow; font-size:35px;'>{today_score}</b> and "
+        f"last week's score was <b style='color:orange; font-size:35px;'>{one_week_ago_score}"
+        f" <b style='color:red; font-size:25px;'>(🔻{round(today_score-one_week_ago_score, 1)})</b>",
+        unsafe_allow_html=True
+    )
+else: 
+    pass
 
 # This week vs Last week score with conditional display
 if this_week_score_rounded is not None and last_week_score_rounded is not None:
-    st.markdown(
-        f"This week's score is <b style='color:green; font-size:35px;'>{this_week_score_rounded}</b> and "
-        f"last week's score was <b style='color:orange; font-size:35px;'>{last_week_score_rounded}</b>",
-        unsafe_allow_html=True
-    )
+    if this_week_score_rounded > last_week_score_rounded:
+        st.markdown(
+            f"This week's score is <b style='color:yellow; font-size:35px;'>{this_week_score_rounded}</b> and "
+            f"last week's score was <b style='color:orange; font-size:35px;'>{last_week_score_rounded}"
+            f" <b style='color:green; font-size:25px;'>(🔼{round(this_week_score_rounded-last_week_score_rounded, 1)})</b>",
+            unsafe_allow_html=True
+        )
+    elif this_week_score_rounded < last_week_score_rounded:
+        st.markdown(
+            f"This week's score is <b style='color:yellow; font-size:35px;'>{this_week_score_rounded}</b> and "
+            f"last week's score was <b style='color:orange; font-size:35px;'>{last_week_score_rounded}"
+            f" <b style='color:red; font-size:25px;'>(🔻{round(this_week_score_rounded-last_week_score_rounded, 1)})</b>",
+            unsafe_allow_html=True
+        )
+    else:
+        pass
 else:
     st.markdown("One or both of the weekly scores are not available.")
 
@@ -122,15 +146,22 @@ st.divider()
 
 # Heatmap to represent the scores
 heatmap = alt.Chart(daily_activity_scores_df).mark_rect().encode(
-    x=alt.X('adj_weekday:N', title='Weekday'),
+    x=alt.X(
+        'adj_weekday:N',
+        title='Weekday',
+        sort=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']  # Explicit order
+    ),
     y=alt.Y('adj_year_week_num:N', title='Year-Week'),
-    color=alt.Color('total_daily_score:Q', scale=alt.Scale(scheme='viridis'), title='Daily Score'),
+    color=alt.Color('total_daily_score:Q', scale=alt.Scale(scheme='redyellowgreen'), title='Daily Score'),
     tooltip=['adj_year_week_num:N', 'adj_weekday:N', 'total_daily_score:Q']  # Tooltip for details
 )
 
 # Text labels for each grid cell
 text = alt.Chart(daily_activity_scores_df).mark_text(align='center', baseline='middle', fontSize=12, color='white').encode(
-    x=alt.X('adj_weekday:N'),
+    x=alt.X(
+        'adj_weekday:N',
+        sort=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']  # Explicit order
+    ),
     y=alt.Y('adj_year_week_num:N'),
     text=alt.Text('total_daily_score:Q', format=".0f")  # Format to display whole numbers
 )
