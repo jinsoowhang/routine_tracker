@@ -10,6 +10,7 @@ sources:
     tables:
       - name: raw__rhythm
       - name: raw__gym
+      - name: raw__professional
          # freshness:
            # error_after: {count: 6, period: hour}
 
@@ -60,7 +61,27 @@ models:
             description: 2 hours behind actual adj_date
           - name: adj_hour
             description: 2 hours behind actual adj_hour
-          
+    
+    - name: stg__professional
+      description: "A fact table that tracks professional status, including application phase, year applied, and associated details."
+      columns:
+        - name: application_status
+          description: "The current status of the professional in the application process (e.g., applied, interviewed, hired)."
+        - name: application_phase
+          description: "The phase number of the application process (e.g., Round 1, Round 2)."
+        - name: application_phase_desc
+          description: "The description of the phase of the application process (e.g., technical interview, behavioral interview)."
+        - name: application_date
+          description: "The date the application was submitted."
+        - name: company_name
+          description: "The name of the company where the application was submitted."
+        - name: job_title
+          description: "The title of the job applied for."
+        - name: job_location
+          description: "The location of the job opportunity."
+        - name: application_link
+          description: "A link to the job posting or relevant application details."
+
     - name: stg__gym
       description: >
         15 minute interval time blocks to increase productivity 
