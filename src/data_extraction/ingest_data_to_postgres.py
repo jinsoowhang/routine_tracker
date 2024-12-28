@@ -21,7 +21,7 @@ class IngestDataToPostgres():
 
         engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db}')
 
-        engine.connect()
+        engine.raw_connection()
 
         # Get the absolute path to the directory of the current script
         script_dir = os.path.dirname(os.path.abspath(__file__))

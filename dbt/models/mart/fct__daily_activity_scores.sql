@@ -42,6 +42,7 @@ activity_score_cte AS (
 			WHEN attribute_1 = 'prepare' THEN 0.65
 			WHEN attribute_1 = 'sick' THEN 0.65
 			WHEN attribute_1 = 'travel' THEN 0.65
+			WHEN attribute_1 = 'vacation' THEN 0.65
 			WHEN attribute_1 = 'wake_up' THEN 0.65
 			WHEN attribute_1 = 'commute' THEN 0.35
 			WHEN attribute_1 = 'leisure' THEN 0
