@@ -15,6 +15,7 @@ spreadsheet_key = os.getenv('SPREADSHEET_KEY')
 
 tab_life = os.getenv('TAB_LIFE')
 tab_gym = os.getenv('TAB_GYM')
+tab_professional = os.getenv('TAB_PROFESSIONAL')
 
 local_file_path = os.getenv('LOCAL_FILE_PATH')
 docker_file_path = './'
@@ -45,6 +46,7 @@ class ImportGoogleSheets():
         raw_historical_df = self.fetch_sheet_data(historical_spreadsheet_key, tab_life)
         raw_df = self.fetch_sheet_data(spreadsheet_key, tab_life)
         gym_df = self.fetch_sheet_data(spreadsheet_key, tab_gym)
+        professional_df = self.fetch_sheet_data(spreadsheet_key, tab_professional)
 
         # Ignore placeholder data in raw_df
         raw_df = raw_df[raw_df['date'] != '1/1/1900']
@@ -53,6 +55,7 @@ class ImportGoogleSheets():
         raw_historical_df = raw_historical_df.astype(str)
         raw_df = raw_df.astype(str)
         gym_df = gym_df.astype(str)
+        professional_df = professional_df.astype(str)
 
         # Concatenate historical and new data (check for empty DataFrames to avoid issues)
         if not raw_historical_df.empty and not raw_df.empty:
@@ -73,4 +76,10 @@ class ImportGoogleSheets():
         else:
             print("No data to save for raw_gym.csv")
 
-        return combined_df, gym_df
+        if not professional_df.empty:
+            professional_data_path = os.path.join(current_file_path, "data", "raw_data", "raw__professional.csv")
+            professional_df.to_csv(professional_data_path, index=False)
+        else:
+            print("No data to save for raw__professional.csv")
+
+        return combined_df, gym_df, professional_df
