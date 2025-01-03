@@ -176,25 +176,48 @@ st.altair_chart(stacked_bar_chart, use_container_width=True)
 ####### High Level Activities ########
 ######################################
 
-st.title("""High Level Activities""")
+st.markdown("## High Level Activities")
 
+# Function to calculate proportions and total hours/days
+def calculate_proportions(df, activity_column):
+    # Group by the selected column and calculate counts
+    proportion_df = df[['activity_id', activity_column]].groupby(activity_column).size().reset_index(name='count')
+    
+    # Add total hours, total days, and proportion
+    proportion_df['total_hours'] = round(proportion_df['count'] / 4)
+    proportion_df['total_days'] = round(proportion_df['total_hours'] / 24)
+    proportion_df['proportion (%)'] = round(proportion_df['count'] / proportion_df['count'].sum() * 100, 1)
+    
+    # Reorder columns
+    return proportion_df[[activity_column, 'total_hours', 'total_days', 'proportion (%)']]
+
+# Display Proportion by Activity Hierarchy
+st.markdown("#### Proportion by Activity Hierarchy")
 activity_hierarchy = st.selectbox(
     "Select activity hierarchy",
+    ['attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places'],
+    index=0
+)
+activity_proportion_df = calculate_proportions(rhythm_df, activity_hierarchy)
+st.write(activity_proportion_df)
+
+######################################
+
+# Display Proportion by Activity Hierarchy Group
+st.markdown("#### Proportion by Activity Hierarchy Group")
+sub_activity_hierarchy = st.selectbox(
+    "Select sub activity",
+    rhythm_df[activity_hierarchy].unique(),
+    index=5
+)
+groupby_activity_hierarchy = st.selectbox(
+    "Select activity hierarchy to group by",
     ['attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places']
 )
 
-# Calculate proportions and total hours/days
-activity_proportion_df = rhythm_df[['activity_id', activity_hierarchy]].groupby(activity_hierarchy).size().reset_index(name='count')
+# Filter data for selected sub activity
+grouped_rhythm_df = rhythm_df[rhythm_df[activity_hierarchy] == sub_activity_hierarchy]
+activity_proportion_2_df = calculate_proportions(grouped_rhythm_df, groupby_activity_hierarchy)
+st.write(activity_proportion_2_df)
 
-# Add total hours and days
-activity_proportion_df['total_hours'] = round(activity_proportion_df['count'] / 4)
-activity_proportion_df['total_days'] = round(activity_proportion_df['total_hours'] / 24)
-activity_proportion_df['proportion (%)'] = round(activity_proportion_df['count'] / activity_proportion_df['count'].sum() * 100, 1)
-
-# Reorder columns
-activity_proportion_df = activity_proportion_df[[activity_hierarchy, 'total_hours', 'total_days', 'proportion (%)']]
-
-# Display in Streamlit
-st.write(activity_proportion_df)
-    
 st.divider()
