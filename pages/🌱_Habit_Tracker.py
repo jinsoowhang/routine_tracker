@@ -203,38 +203,3 @@ with col2:
 
 # Divider below the columns
 st.divider()
-
-#########################
-####### Appendix ########
-#########################
-
-# dfu_weekly['rating'] = dfu_weekly['rating']/7
-
-# # Get the current year and week number
-# current_date = pd.Timestamp.now(tz=pytz.utc).astimezone(timezone('US/Pacific'))
-# current_year = current_date.isocalendar().year
-# this_week = f"{current_year}-W{current_date.isocalendar().week:02d}"  # Ensure two-digit week number
-
-# # Formula for weekly ranking
-# weekly_ranking = dfu_weekly.copy()
-# weekly_ranking['week_ranking'] = weekly_ranking['rating'].rank(ascending=False)
-
-# # Print this week's Score
-# try:
-#     current_week_data = weekly_ranking.loc[this_week]
-
-#     week_score = round(float(current_week_data['rating']), 1)
-#     week_rank = int(current_week_data['week_ranking'])
-#     total_weeks = int(weekly_ranking['week_ranking'].max())
-
-#     # Calculate percentile
-#     percentile = (1 - (week_rank / total_weeks)) * 100
-
-#     st.write(f"Week {this_week} score:          {week_score}")
-#     st.write(f"Week {this_week} all-time Rank:  {week_rank} out of {total_weeks}")
-#     st.write(f"Week {this_week} Percentile:     {percentile:.2f}%")
-
-# except KeyError:
-#     st.write(f"No data available for Week {this_week}.")
-
-# st.divider()
