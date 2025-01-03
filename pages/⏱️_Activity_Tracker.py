@@ -94,6 +94,49 @@ sorted_prompt = filter_by_user_prompt.sort_values(by='rhythm_date', ascending=Fa
 # Display the dataframe
 st.dataframe(sorted_prompt, use_container_width=True)
 
+##############################################
+####### Activity Distribution by Date ########
+##############################################
+
+# Define simplified grouped colors
+custom_colors = {
+    # Highly Productive (Dark Green)
+    "work": "#006400",  # Dark Green
+    "study": "#228B22",  # Forest Green
+    "productive": "#32CD32",  # Lime Green
+
+    # Moderately Productive (Medium Green)
+    "clean": "#66CDAA",  # Medium Aquamarine
+    "grocery": "#8FBC8F",  # Dark Sea Green
+    "read": "#98FB98",  # Pale Green
+    "side_hustle": "#00FA9A",  # Medium Spring Green
+    "learn": "#ADFF2F",  # Green Yellow
+    "exercise": "#637939",  # Dark Green
+    "meet": "#2E8B57",  # Sea Green
+    "church": "#20B2AA",  # Light Sea Green
+
+    # Leisure (Lighter Red shades for distinction)
+    "commute": "#778899",  # Light Slate Gray
+    "cook": "#FF7F50",  # Coral 
+    "vacation": "#A9A9A9",  # Dark Gray 
+    "leisure": "#FF4500",  # Orange Red
+    "hangout": "#FF6A6A",  # Light Red
+
+    # Personal Care (Gray-Green shades)
+    "sleep": "#696969",  # Dim Gray
+    "hygiene": "#D3D3D3",  # Light Gray
+    "wake_up": "#B0C4DE",  # Light Steel Blue
+    "walk": "#B0C4DE",  # Light Steel Blue
+    "sick": "#708090",  # Slate Gray
+    "eat": "#D3D3D3",  # Light Gray (for vacation)
+
+    # Social Activities (Gray shades)
+    "shopping": "#DCDCDC",  # Gainsboro
+    "love": "#E6E6FA",  # Lavender
+    "call": "#D8BFD8"  # Thistle
+}
+
+
 # rhythm_date and attribute_1 should exist in your dataframe
 stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar(size=30).encode(
     x=alt.X(
@@ -107,7 +150,10 @@ stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar(size=30).encode(
     color=alt.Color(
         'attribute_1:N', 
         title='Activity Type',
-        sort=["sleep", "work", "leisure", "hangout", "eat", "productive", "commute", "meet", "exercise", "study", "hygiene", "church", "travel", "clean", "wake_up", "learn", "walk", "vacation", "read", "cook", "call", "sick", "grocery", "love", "side_hustle", "shopping"]
+        scale=alt.Scale(domain=list(custom_colors.keys()), range=list(custom_colors.values()))
+    ),
+    order=alt.Order(
+        'sum(hours):Q'
     ),
     tooltip=[
         'rhythm_date:T', 
@@ -126,9 +172,9 @@ stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar(size=30).encode(
 # Display the chart in Streamlit
 st.altair_chart(stacked_bar_chart, use_container_width=True)
 
-####################################
-####### Activity Proportion ########
-####################################
+######################################
+####### High Level Activities ########
+######################################
 
 st.title("""High Level Activities""")
 
