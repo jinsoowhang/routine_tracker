@@ -122,13 +122,13 @@ gym_exercises_filtered = gym_exercises_df[gym_exercise_date_filter & gym_exercis
 # Create the Altair chart
 chart_3 = alt.Chart(gym_exercises_filtered).mark_bar().encode(
     x=alt.X('gym_date:T', title='Gym Date', axis=alt.Axis(format='%b %d %y')),  # Format as "Apr 25 2022"
-    y=alt.Y('gym_exercise_weight:Q', title='Weight'),
+    y=alt.Y('sum(gym_exercise_repetitions):Q', title='Total Reps'),  # Sum of reps
     color=alt.Color('gym_exercise_weight:N', title='Gym Exercise Type', legend=alt.Legend(title="Gym Exercise Type")),
-    tooltip=['gym_date:T', 'gym_exercise_weight:Q']
+    tooltip=['gym_date:T', 'gym_exercise_weight:N', alt.Tooltip('sum(gym_exercise_repetitions):Q', title='Total Reps')]
 ).properties(
     width=800,
     height=400,
-    title='Stacked Bar Chart of Weekly Activities'
+    title='Sum of Weekly Weight Lifting Reps'
 )
 
 # Display the chart in Streamlit
