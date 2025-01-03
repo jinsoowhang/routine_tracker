@@ -61,6 +61,8 @@ models:
         description: "The type of exercise performed at the gym (e.g., squat, deadlift)."
       - name: gym_exercise_weight
         description: "The weight used for the exercise, if applicable."
+      - name: gym_exercise_repetitions
+        description: "The number of reps for the exercise, if applicable."
       - name: attribute_6
         description: "The attribute used to filter for gym-related data. Always equals 'gym'."
 
