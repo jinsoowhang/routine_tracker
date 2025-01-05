@@ -10,8 +10,17 @@ st.set_page_config(layout='wide')
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
 
-# Perform query.
-tennis_results_df = conn.query('SELECT * FROM fct__tennis_results;', ttl="10m")
+# Perform query
+query = """
+SELECT 
+    results.*,
+    matches.match_type
+FROM fct__tennis_results results
+JOIN fct__tennis_matches matches
+    ON results.match_id = matches.match_id;
+"""
+
+tennis_results_df = conn.query(query, ttl="10m")
 
 ###########################
 ####### Title Page ########
@@ -25,22 +34,34 @@ st.divider()
 ####### Tennis Head to Head ########
 ####################################
 
+tennis_head2head_df = tennis_results_df.copy()
+
 st.title("""🎾Tennis Head2Head""")
 
 st.divider()
 
 tennis_match_type = st.radio(
-    "Select player role",
-    ['teammate', 'opponent'],
-    index=None,
+    "Select match type",
+    ['doubles', 'singles'],
+    index=0,
 )
 
-if tennis_match_type == 'teammate':
-    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 1]
-elif tennis_match_type == 'opponent':
-    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
+tennis_player_role = st.radio(
+    "Select player role",
+    ['opponent', 'teammate'],
+    index=0,
+)
+
+# Filter by match type
+match_type_df = tennis_head2head_df[tennis_head2head_df['match_type'] == tennis_match_type]
+
+# Filter by player role
+if tennis_player_role == 'teammate':
+    opponent_doubles_stats = match_type_df[match_type_df['is_teammate'] == 1]
+elif tennis_player_role == 'opponent':
+    opponent_doubles_stats = match_type_df[match_type_df['is_teammate'] == 0]
 else: 
-    opponent_doubles_stats = tennis_results_df[tennis_results_df['is_teammate'] == 0]
+    opponent_doubles_stats = match_type_df[match_type_df['is_teammate'] == 0]
 
 # Group by player_name and count wins and losses
 player_stats = opponent_doubles_stats.groupby('player_name')['result'].value_counts().unstack(fill_value=0)
