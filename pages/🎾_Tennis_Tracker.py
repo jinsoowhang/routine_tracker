@@ -40,17 +40,29 @@ st.title("""🎾Tennis Head2Head""")
 
 st.divider()
 
-tennis_match_type = st.radio(
+# Create two columns for filter
+col1, col2, col3, col4 = st.columns(4)
+
+# Column 1: Overall Activity KPIs and Average Score by Day
+with col1:
+    tennis_match_type = st.radio(
     "Select match type",
     ['doubles', 'singles'],
     index=0,
-)
+    )
+# Column 2: Average Score by Week
+with col2:
+    tennis_player_role = st.radio(
+        "Select player role",
+        ['opponent', 'teammate'],
+        index=0,
+    )
 
-tennis_player_role = st.radio(
-    "Select player role",
-    ['opponent', 'teammate'],
-    index=0,
-)
+# Column 3 & 4 are empty and it is used for spacing purposes
+with col3:
+    pass
+with col4:
+    pass
 
 # Filter by match type
 match_type_df = tennis_head2head_df[tennis_head2head_df['match_type'] == tennis_match_type]

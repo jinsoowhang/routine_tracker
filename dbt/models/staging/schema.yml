@@ -65,6 +65,8 @@ models:
     - name: stg__professional
       description: "A fact table that tracks professional status, including application phase, year applied, and associated details."
       columns:
+        - name: application_id
+          description: "Unique Identifier based on the appplication_link"
         - name: application_status
           description: "The current status of the professional in the application process (e.g., applied, interviewed, hired)."
         - name: application_phase
