@@ -79,6 +79,10 @@ models:
         description: "The type of match (singles, doubles, or other tennis activity)."
       - name: score
         description: "The score of the tennis match."
+      - name: teammate
+        description: "The name of the tennis teammate"
+      - name: opponents
+        description: "The name of the tennis opponents"
       - name: notes
         description: "Any additional comments or notes about the match."
       - name: result

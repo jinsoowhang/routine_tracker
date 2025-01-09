@@ -13,8 +13,15 @@ conn = st.connection("postgresql", type="sql")
 # Perform query
 query = """
 SELECT 
-    results.*,
-    matches.match_type
+    matches.gym_date AS match_date,
+    results.player_name,
+    results.score,
+    results.result,
+    matches.teammate,
+    matches.opponents,
+    matches.match_type,
+    results.is_teammate,
+    results.match_id
 FROM fct__tennis_results results
 JOIN fct__tennis_matches matches
     ON results.match_id = matches.match_id;
@@ -37,6 +44,39 @@ st.divider()
 tennis_head2head_df = tennis_results_df.copy()
 
 st.title("""🎾Tennis Head2Head""")
+
+st.divider()
+
+# Define the columns and corresponding filter names
+filter_columns = {
+    "Player Name": "player_name"
+}
+
+# Create the filters dynamically
+filters = {}
+with st.container():
+    cols = st.columns(len(filter_columns))  # Create the necessary number of columns
+    for i, (label, column) in enumerate(filter_columns.items()):
+        with cols[i]:
+            filters[column] = st.selectbox(
+                label,
+                options=["All"] + tennis_head2head_df[column].unique().tolist(),
+                index=0
+           )
+
+# Apply filters dynamically
+filtered_df = tennis_head2head_df.copy()
+for column, selected_value in filters.items():
+    if selected_value != "All":
+        filtered_df = filtered_df[filtered_df[column] == selected_value]
+
+st.write(filtered_df)
+
+##################################
+####### Tennis W/L Record ########
+##################################
+
+st.title("""🎾Tennis W/L Record""")
 
 st.divider()
 
