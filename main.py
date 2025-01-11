@@ -1,5 +1,7 @@
-from src.data_extraction.import_google_sheets import ImportGoogleSheets
-from src.data_extraction.ingest_data_to_postgres import IngestDataToPostgres
+# Import Rhythm Packages
+from src.etl_rhythm.data_extraction_rhythm.import_google_sheets import ImportGoogleSheets
+from src.etl_rhythm.data_extraction_rhythm.ingest_data_to_postgres import IngestDataToPostgres
+
 import argparse
 
 def main(args):
