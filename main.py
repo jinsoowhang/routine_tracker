@@ -5,6 +5,7 @@ from src.etl_finance.data_transformation_finance.americanExpress_data_transforma
 from src.etl_finance.data_transformation_finance.boa_data_transformation import cleanBankofamericaData
 from src.etl_finance.data_transformation_finance.chase_data_transformation import cleanChaseData
 from src.etl_finance.data_extraction_finance.append_all_clean_data_extraction import AppendCleanData
+from src.etl_finance.data_loading_finance.export_to_google_sheets import ExportGoogleSheets
 
 # Import Finance Packages
 from src.etl_finance.data_extraction_finance.raw_spend_data_extraction import DataExtraction
@@ -32,6 +33,7 @@ def main(args):
     clean_bank_of_america_data = cleanBankofamericaData()
     clean_chase_data = cleanChaseData()
     append_clean_data = AppendCleanData()
+    export_google_sheets = ExportGoogleSheets()
 
     # Concatenate all americanExpress_jinsoo raw spend data
     americanExpress_jinsoo_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "americanExpress_jinsoo")
@@ -91,12 +93,24 @@ def main(args):
     
 
     #########################################################################
-    ######################### APPEND ALL CLEAN DATA #########################
+    ######################### APPEND ALL CLEAN FINANCE DATA #########################
     #########################################################################
 
 
     #Append all raw spend data files into clean data file
     append_clean_data.append_all_clean_data()
+
+
+    ####################################################################################
+    ######################### LOAD CLEAN DATA TO GOOGLE SHEETS #########################
+    ####################################################################################
+
+
+    # CSV file path
+    all_clean_data_path = file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "concatenated_data", "clean_data_spend", "all_clean_data_spend.csv")
+
+    # Export to Google Sheets
+    export_google_sheets.export_to_google_sheets(tab_name='all_transactions', csv_path=all_clean_data_path)
 
 
     ###########################################################################
