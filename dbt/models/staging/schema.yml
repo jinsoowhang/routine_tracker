@@ -8,6 +8,7 @@ sources:
     schema: public
       # loaded_at_field: record_loaded_at
     tables:
+      - name: raw__finance
       - name: raw__rhythm
       - name: raw__gym
       - name: raw__professional
@@ -15,52 +16,73 @@ sources:
            # error_after: {count: 6, period: hour}
 
 models:
+    - name: stg__finance  # Replace <model_name> with your model's name
+      description: |
+        This model processes raw finance data to create a structured table with cleaned and formatted fields such as transaction date, supplier, category, and more.
+      columns:
+        - name: transaction_date
+          description: The transaction date formatted as an integer in YYYYMMDD format.
+        - name: supplier
+          description: The supplier associated with the transaction.
+        - name: category
+          description: The category of the transaction.
+        - name: card_owner
+          description: The owner of the card used for the transaction.
+        - name: bank_name
+          description: The name of the bank associated with the transaction.
+        - name: transaction_type
+          description: The type of transaction, e.g., credit or debit.
+        - name: amount
+          description: The transaction amount.
+        - name: memo
+          description: Additional notes or information about the transaction.
+
     - name: stg__rhythm
       description: >
         15 minute interval time blocks to increase productivity 
         and minimize cognitive load of remembering what and when activities
         need to be completed
       columns:
-          - name: activity_id
-            description: This is the table's unique ID
-            tests:
-              - not_null:
-                  severity: warn
-              - unique:
-                  severity: warn
-            severity: warn
-          - name: weekday
-            description: Weekday of the date of activity
-          - name: day_num 
-            description: Weekday number of the date of activity
-          - name: date 
-            description: Date of activity
-          - name: hour 
-            description: The time of the activity
-          - name: activity 
-            description: Concatenation of activity from attribute_1 and attribute_2
-          - name: attribute_1 
-            description: Main category of activity
-          - name: attribute_2
-            description: Secondary category of activity
-          - name: attribute_3
-            description: Third category of activity
-          - name: attribute_4
-            description: Fourth category of activity
-          - name: places
-            description: location of the activity
-          - name: people
-            description: people involved in the activity
-          - name: notes
-            description: additional notes of activity
-          - name: adj_weekday
-            description: adjusted date of activity is 2 hours behind actual date of activity
-          - name: adj_day_num
-            description: 2 hours behind actual adj_day_num
-          - name: adj_date
-            description: 2 hours behind actual adj_date
-          - name: adj_hour
-            description: 2 hours behind actual adj_hour
+        - name: activity_id
+          description: This is the table's unique ID
+          tests:
+            - not_null:
+                severity: warn
+            - unique:
+                severity: warn
+          severity: warn
+        - name: weekday
+          description: Weekday of the date of activity
+        - name: day_num 
+          description: Weekday number of the date of activity
+        - name: date 
+          description: Date of activity
+        - name: hour 
+          description: The time of the activity
+        - name: activity 
+          description: Concatenation of activity from attribute_1 and attribute_2
+        - name: attribute_1 
+          description: Main category of activity
+        - name: attribute_2
+          description: Secondary category of activity
+        - name: attribute_3
+          description: Third category of activity
+        - name: attribute_4
+          description: Fourth category of activity
+        - name: places
+          description: location of the activity
+        - name: people
+          description: people involved in the activity
+        - name: notes
+          description: additional notes of activity
+        - name: adj_weekday
+          description: adjusted date of activity is 2 hours behind actual date of activity
+        - name: adj_day_num
+          description: 2 hours behind actual adj_day_num
+        - name: adj_date
+          description: 2 hours behind actual adj_date
+        - name: adj_hour
+          description: 2 hours behind actual adj_hour
     
     - name: stg__professional
       description: "A fact table that tracks professional status, including application phase, year applied, and associated details."
@@ -90,32 +112,32 @@ models:
         and minimize cognitive load of remembering what and when activities
         need to be completed
       columns:
-          - name: activity_id
-            description: This is the table's unique ID
-            tests:
-              - not_null:
-                  severity: warn
-          - name: Day
-            description: Weekday of the date of activity
-          - name: Day_num 
-            description: Weekday number of the date of activity
-          - name: Date 
-            description: Date of activity
-          - name: Hour 
-            description: The time of the activity
-          - name: Activity 
-            description: Concatenation of activity from Attribute_1 and Attribute_2
-          - name: Attribute_1 
-            description: Main category of activity
-          - name: Attribute_2
-            description: Secondary category of activity
-          - name: Attribute_3
-            description: Third category of activity
-          - name: Attribute_4
-            description: Fourth category of activity
-          - name: Attribute_5
-            description: Fifth category of activity
-          - name: Attribute_6
-            description: Sixth category of activity
-          - name: Notes
-            description: additional notes of activity
+        - name: activity_id
+          description: This is the table's unique ID
+          tests:
+            - not_null:
+                severity: warn
+        - name: Day
+          description: Weekday of the date of activity
+        - name: Day_num 
+          description: Weekday number of the date of activity
+        - name: Date 
+          description: Date of activity
+        - name: Hour 
+          description: The time of the activity
+        - name: Activity 
+          description: Concatenation of activity from Attribute_1 and Attribute_2
+        - name: Attribute_1 
+          description: Main category of activity
+        - name: Attribute_2
+          description: Secondary category of activity
+        - name: Attribute_3
+          description: Third category of activity
+        - name: Attribute_4
+          description: Fourth category of activity
+        - name: Attribute_5
+          description: Fifth category of activity
+        - name: Attribute_6
+          description: Sixth category of activity
+        - name: Notes
+          description: additional notes of activity
