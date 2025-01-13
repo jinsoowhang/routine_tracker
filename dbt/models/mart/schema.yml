@@ -62,9 +62,7 @@ models:
       - name: parent_supplier
         description: "The parent supplier for the transaction (from the supplier dimension)."
       - name: spend_category
-        description: "The spend category for the supplier (from the supplier dimension)."
-      - name: bank_spend_category
-        description: "The category of the transaction as defined by the bank."
+        description: "The spend category for the supplier, assigned by the bank"
       - name: card_owner
         description: "The card owner associated with the transaction."
       - name: bank_name
