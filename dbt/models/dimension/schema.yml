@@ -3,3 +3,18 @@ version: 2
 models:
   - name: dim__dates
     description: "A table with all date dimensions"
+
+  - name: dim__supplier
+    description: |
+      This model categorizes suppliers into different spend categories such as Dining Out, Entertainment, Gifts and Donations, Grocery, Health and Wellness, Home, Insurance, Payments, Rent and Mortgage, Shopping, Subscriptions, Transportation, and Travel. 
+      Each supplier is mapped to its respective parent supplier based on the supplier name.
+    columns:
+      - name: supplier
+        description: |
+          The name of the supplier.
+      - name: parent_supplier
+        description: |
+          The mapped parent supplier name based on the supplier name.
+      - name: spend_category
+        description: |
+          The spend category that the supplier belongs to, such as Dining Out, Entertainment, etc.
