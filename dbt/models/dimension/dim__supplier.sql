@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH dining_out AS (
 	SELECT DISTINCT
 		supplier,

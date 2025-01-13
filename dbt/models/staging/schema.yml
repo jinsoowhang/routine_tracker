@@ -24,8 +24,8 @@ models:
           description: The transaction date formatted as an integer in YYYYMMDD format.
         - name: supplier
           description: The supplier associated with the transaction.
-        - name: category
-          description: The category of the transaction.
+        - name: bank_spend_category
+          description: The spend category of the transaction, assigned by the bank.
         - name: card_owner
           description: The owner of the card used for the transaction.
         - name: bank_name
