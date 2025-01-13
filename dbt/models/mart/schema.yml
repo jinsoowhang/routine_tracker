@@ -52,6 +52,30 @@ models:
           - not_null:
               severity: warn
 
+  - name: fct__finance_transactions
+    description: "A fact table containing financial transaction data with enriched supplier details."
+    columns:
+      - name: transaction_date
+        description: "The date of the transaction in 'YYYY-MM-DD' format."
+      - name: supplier
+        description: "The supplier involved in the transaction."
+      - name: parent_supplier
+        description: "The parent supplier for the transaction (from the supplier dimension)."
+      - name: spend_category
+        description: "The spend category for the supplier (from the supplier dimension)."
+      - name: bank_spend_category
+        description: "The category of the transaction as defined by the bank."
+      - name: card_owner
+        description: "The card owner associated with the transaction."
+      - name: bank_name
+        description: "The name of the bank associated with the transaction."
+      - name: transaction_type
+        description: "The type of transaction (e.g., purchase, payment)."
+      - name: amount
+        description: "The amount of the financial transaction."
+      - name: memo
+        description: "The memo or note associated with the transaction."
+
   - name: fct__gym_exercises
     description: "A fact table tracking gym exercises, including the exercise type, weight, and associated dates."
     columns:

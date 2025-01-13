@@ -5,7 +5,7 @@ WITH source AS (
     SELECT 
         "Date" AS date,
         "Supplier" AS supplier,
-        "Category" AS category,
+        "Category" AS bank_spend_category,
         "Card Owner" AS card_owner,
         "Bank Name" AS bank_name,
         "Type" AS transaction_type,
@@ -15,12 +15,25 @@ WITH source AS (
 
 ),
 
+enhanced_supplier_data AS (
+    SELECT 
+        date,
+        supplier,
+        bank_spend_category,
+        card_owner,
+        bank_name,
+        transaction_type,
+        amount,
+        memo
+    FROM source
+),
+
 results AS (
 
     SELECT 
         CAST(TO_CHAR(TO_DATE(date, 'YYYY-MM-DD'), 'YYYYMMDD') AS INTEGER) AS transaction_date,
         supplier,
-        category,
+        bank_spend_category,
         card_owner,
         bank_name,
         transaction_type,

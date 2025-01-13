@@ -72,9 +72,11 @@ with st.container():
     cols = st.columns(len(filter_columns))  # Create the necessary number of columns
     for i, (label, column) in enumerate(filter_columns.items()):
         with cols[i]:
+            # Filter out None or NaN values and sort the remaining values
+            sorted_values = sorted(professional_df[column].dropna().unique().tolist())
             filters[column] = st.selectbox(
                 label,
-                options=["All"] + professional_df[column].unique().tolist(),
+                options=["All"] + sorted_values,
                 index=0
             )
 
