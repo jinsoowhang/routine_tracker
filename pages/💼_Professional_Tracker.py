@@ -12,6 +12,8 @@ conn = st.connection("postgresql", type="sql")
 # Perform query.
 professional_df = conn.query('SELECT * FROM stg__professional;', ttl="10m")
 
+rhythm_df = conn.query('SELECT * FROM stg__rhythm;', ttl="10m")
+
 ###########################
 ####### Title Page ########
 ###########################
@@ -20,9 +22,9 @@ st.title("""💼 Professional Tracker""")
 
 st.divider()
 
-##############################
-####### Data Cleaning ########
-##############################
+#############################################
+####### Data Cleaning - Professional ########
+#############################################
 
 professional_df['application_date'] = pd.to_datetime(professional_df['application_date'])
 
@@ -40,7 +42,58 @@ professional_df = professional_df[
     (professional_df['application_date'] <= pd.to_datetime(end_dt))
 ]
 
-#########################################################
+#######################################
+####### Data Cleaning - Rhythm ########
+#######################################
+
+# Convert to date
+rhythm_df['rhythm_date'] = pd.to_datetime(rhythm_df['rhythm_date'], format='%Y%m%d')
+
+# Filter the DataFrame to include only the selected date range
+rhythm_df = rhythm_df[
+    (rhythm_df['rhythm_date'] >= pd.to_datetime(start_dt)) &
+    (rhythm_df['rhythm_date'] <= pd.to_datetime(end_dt))
+]
+
+#####################################
+####### Job Activity Tracker ########
+#####################################
+
+st.markdown('## Job Activity Tracker')
+
+work_df = rhythm_df[rhythm_df['attribute_1'] == 'work'].copy()
+
+# Group by 'attribute_3', calculate value counts, and divide by 4
+job_activity_tracker_df = (
+    work_df[['attribute_3']]
+    .groupby('attribute_3')
+    .value_counts()
+    .sort_values(ascending=False)
+    .rename('counts')  # Rename the resulting Series
+    .reset_index()  # Reset index to create a DataFrame
+)
+
+# Add hours_spent column
+job_activity_tracker_df['hours_spent'] = job_activity_tracker_df['counts'] / 4
+
+# Add proportion column
+total_counts = job_activity_tracker_df['counts'].sum()
+job_activity_tracker_df['proportion(%)'] = (job_activity_tracker_df['counts'] / total_counts * 100).round()
+
+# Display the DataFrame with relevant columns
+st.dataframe(
+    job_activity_tracker_df[['attribute_3', 'hours_spent', 'proportion(%)']],
+    use_container_width=True,
+    hide_index=True
+)
+
+st.divider()
+
+########################################
+####### Job Application Tracker ########
+########################################
+
+st.markdown('## Job Application Tracker')
 
 # Create a new column to concatenate all relevant columns
 columns_to_concatenate = ['application_status', 'application_phase', 'application_phase_desc',\
@@ -54,7 +107,7 @@ professional_df['concatenated_values'] = professional_df[columns_to_concatenate]
 ####### Filters ########
 ########################
 
-st.markdown("## Filters")
+st.markdown("### Filters")
 
 # Define the columns and corresponding filter names
 filter_columns = {
