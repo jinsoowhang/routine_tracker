@@ -70,7 +70,7 @@ for column, selected_value in filters.items():
     if selected_value != "All":
         filtered_df = filtered_df[filtered_df[column] == selected_value]
 
-st.write(filtered_df)
+st.dataframe(filtered_df, use_container_width=True, hide_index=True)
 
 ##################################
 ####### Tennis W/L Record ########
@@ -134,4 +134,4 @@ player_stats['win_rate (%)'] = (
 player_stats = player_stats.reset_index()
 
 # Show the dataframe
-st.dataframe(player_stats, use_container_width=True)
+st.dataframe(player_stats, use_container_width=True, hide_index=True)

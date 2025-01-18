@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
-from datetime import datetime
-import matplotlib.pyplot as plt
 from datetime import datetime as dt
 from datetime import timedelta
 
@@ -39,13 +37,6 @@ columns_to_concatenate = ['activity', 'attribute_1', 'attribute_2', 'attribute_3
 rhythm_df['concatenated_values'] = rhythm_df[columns_to_concatenate].astype(str).apply(
     lambda row: ' | '.join(row.values), axis=1
 )
-
-##############################
-####### Data Cleaning ########
-##############################
-
-# Convert to datetime
-rhythm_df['rhythm_date'] = pd.to_datetime(rhythm_df['rhythm_date'], format='%Y%m%d')
 
 ########################
 ####### Filters ########
@@ -204,7 +195,7 @@ st.altair_chart(stacked_bar_chart, use_container_width=True)
 st.markdown('## Activity Table')
 
 # Display the dataframe
-st.dataframe(sorted_prompt, use_container_width=True)
+st.dataframe(sorted_prompt, use_container_width=True, hide_index=True)
 
 st.divider()
 
@@ -235,7 +226,7 @@ activity_hierarchy = st.selectbox(
     index=0
 )
 activity_proportion_df = calculate_proportions(rhythm_df, activity_hierarchy)
-st.write(activity_proportion_df)
+st.dataframe(activity_proportion_df, hide_index=True)
 
 ######################################
 
@@ -254,6 +245,6 @@ groupby_activity_hierarchy = st.selectbox(
 # Filter data for selected sub activity
 grouped_rhythm_df = rhythm_df[rhythm_df[activity_hierarchy] == sub_activity_hierarchy]
 activity_proportion_2_df = calculate_proportions(grouped_rhythm_df, groupby_activity_hierarchy)
-st.write(activity_proportion_2_df)
+st.dataframe(activity_proportion_2_df, hide_index=True)
 
 st.divider()

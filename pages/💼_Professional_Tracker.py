@@ -174,6 +174,6 @@ sorted_prompt = filter_by_user_prompt.sort_values(by='application_date', ascendi
 
 # Display the dataframe
 st.markdown("##### Application Details")
-st.dataframe(sorted_prompt, use_container_width=True)
+st.dataframe(sorted_prompt, use_container_width=True, hide_index=True)
 
 
