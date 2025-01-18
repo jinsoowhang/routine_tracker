@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
-from datetime import datetime
-import matplotlib.pyplot as plt
 from datetime import datetime as dt
 from datetime import timedelta
 
@@ -40,13 +38,6 @@ rhythm_df['concatenated_values'] = rhythm_df[columns_to_concatenate].astype(str)
     lambda row: ' | '.join(row.values), axis=1
 )
 
-##############################
-####### Data Cleaning ########
-##############################
-
-# Convert to datetime
-rhythm_df['rhythm_date'] = pd.to_datetime(rhythm_df['rhythm_date'], format='%Y%m%d')
-
 ########################
 ####### Filters ########
 ########################
@@ -64,11 +55,11 @@ rhythm_df = rhythm_df[
     (rhythm_df['rhythm_date'] <= pd.to_datetime(end_dt))
 ]
 
-##############################################
-####### Last Occurrence of Activity X ########
-##############################################
+###############################
+####### Track Activity ########
+###############################
 
-st.title('Last Occurrence of Activity X')
+st.markdown('## Track Activity')
 
 # User Input
 last_activity_prompt = st.text_input("Write the activity you want to track in lowercase 👇")
@@ -80,19 +71,44 @@ filter_by_user_prompt = rhythm_df[rhythm_df['concatenated_values'].str.lower().s
 activity_hours_spent = int(len(filter_by_user_prompt)/4)
 activity_days_spent = int(activity_hours_spent/24)
 activity_proportion_spent = round(len(filter_by_user_prompt) / len(rhythm_df) * 100, 1)
-
-if last_activity_prompt == '':
-    st.write('There is no input from user. Please write the activity in text box ☝️')
-else: 
-    st.write(f'All time {'"'+str(last_activity_prompt)+'"'} duration: {activity_hours_spent} hours or {activity_days_spent} days, accounts for {activity_proportion_spent}% of total activities')
+activity_count_of_days = filter_by_user_prompt['rhythm_date'].nunique()
 
 # Sort by date in descending order
 columns_to_display = ['days_since_rhythm_date', 'rhythm_date', 'weekday', 'activity', 'attribute_1', 'attribute_2', 'attribute_3', 'attribute_4', 'places', 'people', 'notes']
 
 sorted_prompt = filter_by_user_prompt.sort_values(by='rhythm_date', ascending=False)[columns_to_display]
 
-# Display the dataframe
-st.dataframe(sorted_prompt, use_container_width=True)
+st.divider()
+
+################################
+####### High Level KPIs ########
+################################
+
+st.markdown('## High Level KPIs')
+
+if last_activity_prompt == '':
+    st.write('There is no input from user. Please write the activity in text box ☝️')
+else: 
+    # Columns for KPIs
+    st.write(f'Time {'"'+str(last_activity_prompt)+'"'} duration: {activity_hours_spent} hours or {activity_days_spent} total days, accounts for {activity_proportion_spent}% of total activities')
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(label="Count of unique days", value=activity_count_of_days)
+        
+
+    with col2:
+        st.metric(label="Sum of Hours", value=activity_hours_spent)
+        
+        
+    with col3:
+        st.metric(label="Sum of Days", value=activity_days_spent)
+
+    with col4:
+        st.metric(label="Proportion of Activities", value=f'{activity_proportion_spent}%')
+    
+
+st.divider()
 
 ##############################################
 ####### Activity Distribution by Date ########
@@ -172,6 +188,17 @@ stacked_bar_chart = alt.Chart(sorted_prompt).mark_bar(size=30).encode(
 # Display the chart in Streamlit
 st.altair_chart(stacked_bar_chart, use_container_width=True)
 
+###############################
+####### Activity Table ########
+###############################
+
+st.markdown('## Activity Table')
+
+# Display the dataframe
+st.dataframe(sorted_prompt, use_container_width=True, hide_index=True)
+
+st.divider()
+
 ######################################
 ####### High Level Activities ########
 ######################################
@@ -199,7 +226,7 @@ activity_hierarchy = st.selectbox(
     index=0
 )
 activity_proportion_df = calculate_proportions(rhythm_df, activity_hierarchy)
-st.write(activity_proportion_df)
+st.dataframe(activity_proportion_df, hide_index=True)
 
 ######################################
 
@@ -218,6 +245,6 @@ groupby_activity_hierarchy = st.selectbox(
 # Filter data for selected sub activity
 grouped_rhythm_df = rhythm_df[rhythm_df[activity_hierarchy] == sub_activity_hierarchy]
 activity_proportion_2_df = calculate_proportions(grouped_rhythm_df, groupby_activity_hierarchy)
-st.write(activity_proportion_2_df)
+st.dataframe(activity_proportion_2_df, hide_index=True)
 
 st.divider()
