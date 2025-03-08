@@ -35,28 +35,28 @@ def main(args):
     append_clean_data = AppendCleanData()
     export_google_sheets = ExportGoogleSheets()
 
-    # Concatenate all americanExpress_jinsoo raw spend data
-    americanExpress_jinsoo_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "americanExpress_jinsoo")
-    americanExpress_jinsoo_file_name = "americanExpress_jinsoo_raw_spend.csv"
-    data_extraction.extract_raw_spend_data(bank_file_path=americanExpress_jinsoo_file_path, file_name=americanExpress_jinsoo_file_name)
+    # # Concatenate all americanExpress_jinsoo raw spend data
+    # americanExpress_jinsoo_file_path = os.path.join("data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "americanExpress_jinsoo")
+    # americanExpress_jinsoo_file_name = "americanExpress_jinsoo_raw_spend.csv"
+    # data_extraction.extract_raw_spend_data(bank_file_path=americanExpress_jinsoo_file_path, file_name=americanExpress_jinsoo_file_name)
 
 
-    # Concatenate all boa_jinsoo raw spend data
-    boa_jinsoo_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "boa_jinsoo")
-    boa_jinsoo_file_name = "boa_jinsoo_raw_spend.csv"
-    data_extraction.extract_raw_spend_data(bank_file_path=boa_jinsoo_file_path, file_name=boa_jinsoo_file_name)
+    # # Concatenate all boa_jinsoo raw spend data
+    # boa_jinsoo_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "boa_jinsoo")
+    # boa_jinsoo_file_name = "boa_jinsoo_raw_spend.csv"
+    # data_extraction.extract_raw_spend_data(bank_file_path=boa_jinsoo_file_path, file_name=boa_jinsoo_file_name)
 
 
-    # Concatenate all chase_jinsoo raw spend data
-    chase_jinsoo_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "chase_jinsoo")
-    chase_jinsoo_file_name = "chase_jinsoo_raw_spend.csv"
-    data_extraction.extract_raw_spend_data(bank_file_path=chase_jinsoo_file_path, file_name=chase_jinsoo_file_name)
+    # # Concatenate all chase_jinsoo raw spend data
+    # chase_jinsoo_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "chase_jinsoo")
+    # chase_jinsoo_file_name = "chase_jinsoo_raw_spend.csv"
+    # data_extraction.extract_raw_spend_data(bank_file_path=chase_jinsoo_file_path, file_name=chase_jinsoo_file_name)
 
 
-    # Concatenate all chase_nicole raw spend data
-    chase_nicole_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "chase_nicole")
-    chase_nicole_file_name = "chase_nicole_raw_spend.csv"
-    data_extraction.extract_raw_spend_data(bank_file_path=chase_nicole_file_path, file_name=chase_nicole_file_name)
+    # # Concatenate all chase_nicole raw spend data
+    # chase_nicole_file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "bank_statements", "credit_card_statements", "chase_nicole")
+    # chase_nicole_file_name = "chase_nicole_raw_spend.csv"
+    # data_extraction.extract_raw_spend_data(bank_file_path=chase_nicole_file_path, file_name=chase_nicole_file_name)
 
 
     ##########################################################################
@@ -64,53 +64,53 @@ def main(args):
     ##########################################################################
 
 
-    # Clean Jinsoo American Express data
-    clean_american_express_data.cleaning_american_express_credit_card_data(
-        file_name="americanExpress_jinsoo_raw_spend.csv",
-        card_owner='JW',
-        output_file_name='americanExpress_jinsoo_clean_data_spend.csv')
+    # # Clean Jinsoo American Express data
+    # clean_american_express_data.cleaning_american_express_credit_card_data(
+    #     file_name="americanExpress_jinsoo_raw_spend.csv",
+    #     card_owner='JW',
+    #     output_file_name='americanExpress_jinsoo_clean_data_spend.csv')
 
 
-    # Clean Jinsoo BOA data
-    clean_bank_of_america_data.cleaning_bank_of_america_credit_card_data(
-        file_name="boa_jinsoo_raw_spend.csv",
-        card_owner='JW',
-        output_file_name='boa_jinsoo_clean_data_spend.csv')
+    # # Clean Jinsoo BOA data
+    # clean_bank_of_america_data.cleaning_bank_of_america_credit_card_data(
+    #     file_name="boa_jinsoo_raw_spend.csv",
+    #     card_owner='JW',
+    #     output_file_name='boa_jinsoo_clean_data_spend.csv')
 
 
-    # Clean Jinsoo Chase data
-    clean_chase_data.cleaning_chase_credit_card_data(
-        file_name="chase_jinsoo_raw_spend.csv",
-        card_owner='JW',
-        output_file_name='chase_jinsoo_clean_data_spend.csv')
+    # # Clean Jinsoo Chase data
+    # clean_chase_data.cleaning_chase_credit_card_data(
+    #     file_name="chase_jinsoo_raw_spend.csv",
+    #     card_owner='JW',
+    #     output_file_name='chase_jinsoo_clean_data_spend.csv')
 
 
-    # Clean Nicole Chase data
-    clean_chase_data.cleaning_chase_credit_card_data(
-        file_name="chase_nicole_raw_spend.csv",
-        card_owner='NM',
-        output_file_name="chase_nicole_clean_data_spend")
+    # # Clean Nicole Chase data
+    # clean_chase_data.cleaning_chase_credit_card_data(
+    #     file_name="chase_nicole_raw_spend.csv",
+    #     card_owner='NM',
+    #     output_file_name="chase_nicole_clean_data_spend")
     
 
-    #########################################################################
-    ######################### APPEND ALL CLEAN FINANCE DATA #########################
-    #########################################################################
+    # #########################################################################
+    # ######################### APPEND ALL CLEAN FINANCE DATA #########################
+    # #########################################################################
 
 
-    #Append all raw spend data files into clean data file
-    append_clean_data.append_all_clean_data()
+    # #Append all raw spend data files into clean data file
+    # append_clean_data.append_all_clean_data()
 
 
-    ####################################################################################
-    ######################### LOAD CLEAN DATA TO GOOGLE SHEETS #########################
-    ####################################################################################
+    # ####################################################################################
+    # ######################### LOAD CLEAN DATA TO GOOGLE SHEETS #########################
+    # ####################################################################################
 
 
-    # CSV file path
-    all_clean_data_path = file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "concatenated_data", "clean_data_spend", "all_clean_data_spend.csv")
+    # # CSV file path
+    # all_clean_data_path = file_path = os.path.join(current_file_path, "data", "raw_data", "raw_personal_finance_data", "concatenated_data", "clean_data_spend", "all_clean_data_spend.csv")
 
-    # Export to Google Sheets
-    export_google_sheets.export_to_google_sheets(tab_name='all_transactions', csv_path=all_clean_data_path)
+    # # Export to Google Sheets
+    # export_google_sheets.export_to_google_sheets(tab_name='all_transactions', csv_path=all_clean_data_path)
 
 
     ###########################################################################
