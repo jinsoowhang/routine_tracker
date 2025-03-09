@@ -74,7 +74,6 @@ last_week_score_rounded = round(last_week_score, 1) if last_week_score is not No
 st.markdown("## Activity Score")
 
 # Today vs One week ago scores
-
 if today_score > one_week_ago_score:
     st.markdown(
         f"Today's score is <b style='color:yellow; font-size:35px;'>{today_score}</b> and "
