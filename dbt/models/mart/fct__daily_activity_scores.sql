@@ -1,7 +1,7 @@
 WITH raw AS (
     SELECT 
         TO_DATE(adj_rhythm_date::TEXT, 'YYYYMMDD') AS adj_rhythm_date,
-		CONCAT(year_number, '-W', week_of_year) AS adj_year_week_num,
+		CONCAT(year_number, '-W', LPAD(week_of_year::TEXT, 2, '0')) AS adj_year_week_num,
         adj_weekday,
         adj_day_num,
         attribute_1	

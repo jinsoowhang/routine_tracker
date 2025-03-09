@@ -74,7 +74,6 @@ last_week_score_rounded = round(last_week_score, 1) if last_week_score is not No
 st.markdown("## Activity Score")
 
 # Today vs One week ago scores
-
 if today_score > one_week_ago_score:
     st.markdown(
         f"Today's score is <b style='color:yellow; font-size:35px;'>{today_score}</b> and "
@@ -115,28 +114,42 @@ else:
 
 st.divider()
 
+# User slider to control vertical line shift
+line_shift = st.slider("Shift vertical lines by (days):", min_value=-7, max_value=7, value=1, step=1)
+
+# Create a DataFrame with vertical line positions every 7 days
+vertical_lines_df = daily_activity_scores_df.iloc[::7].copy()
+vertical_lines_df['adj_rhythm_date'] = pd.to_datetime(vertical_lines_df['adj_rhythm_date']) + pd.Timedelta(days=line_shift)
+
 # Line Chart for daily score over time
 line_chart = alt.Chart(daily_activity_scores_df).mark_line().encode(
-    x = alt.X('adj_rhythm_date'),
-    y = alt.Y('total_daily_score', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
-    tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'total_daily_score:Q']  # Add adj_year_week_num to the tooltip
+    x=alt.X('adj_rhythm_date:T'),
+    y=alt.Y('total_daily_score:Q', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
+    tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'total_daily_score:Q']
 )
 
 # Text labels
-labels = alt.Chart(daily_activity_scores_df).mark_text(align='left', dx=-10, dy=-10, fontSize=12, color='white').encode(
+labels = alt.Chart(daily_activity_scores_df).mark_text(
+    align='left', dx=-10, dy=-10, fontSize=12, color='white'
+).encode(
     x=alt.X('adj_rhythm_date:T'),
     y=alt.Y('total_daily_score:Q'),
-    text=alt.Text('total_daily_score:Q', format=".1f")  # Round the score to 1 decimal place
+    text=alt.Text('total_daily_score:Q', format=".1f")
 )
 
-# Combine the line chart and labels with a title
-chart_1 = (line_chart + labels).properties(
+# Vertical lines with adjustable shift
+vlines = alt.Chart(vertical_lines_df).mark_rule(color='gray', strokeDash=[4, 4]).encode(
+    x='adj_rhythm_date:T'
+)
+
+# Combine all elements
+chart_1 = (line_chart + labels + vlines).properties(
     title="Daily Score Over Time",
-    width=800,  # Optional: Adjust width
-    height=400  # Optional: Adjust height
+    width=800,
+    height=400
 )
 
-# Display the chart in Streamlit
+# Display in Streamlit
 st.altair_chart(chart_1, use_container_width=True)
 st.divider()
 
