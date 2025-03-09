@@ -26,3 +26,6 @@ packages.yml
 
 # Ignore READ files
 READ.md
+
+# Ignore .venv folder (virtual environment)
+.venv/
