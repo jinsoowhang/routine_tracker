@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+from datetime import datetime as dt
+from datetime import timedelta
 
 st.set_page_config(layout='wide')
 
@@ -17,6 +19,30 @@ body_weight_df = conn.query('SELECT * FROM fct__weight_tracking;', ttl="10m")
 st.title("""💊 Health Tracker""")
 
 st.divider()
+
+##############################
+####### Data Cleaning ########
+##############################
+
+body_weight_df['weigh_in_date'] = pd.to_datetime(body_weight_df['weigh_in_date'])
+
+########################
+####### Filters ########
+########################
+
+# Calculate the default start and end dates
+default_end_date = dt.today()
+default_start_date = default_end_date - timedelta(days=365)
+
+# Add date input widgets with default values
+start_dt = st.sidebar.date_input('From Date', value=default_start_date)
+end_dt = st.sidebar.date_input('To Date', value=default_end_date)
+
+# Filter the DataFrame to include only the selected date range
+body_weight_df = body_weight_df[
+    (body_weight_df['weigh_in_date'] >= pd.to_datetime(start_dt)) &
+    (body_weight_df['weigh_in_date'] <= pd.to_datetime(end_dt))
+]
 
 ####################################
 ####### Body Weight Tracker ########
