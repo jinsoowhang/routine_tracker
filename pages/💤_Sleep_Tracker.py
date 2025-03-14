@@ -10,19 +10,19 @@ st.set_page_config(layout='wide')
 conn = st.connection("postgresql", type="sql")
 
 # Perform query.
-body_weight_df = conn.query("""
+df = conn.query("""
     SELECT 
         rhythm_date,
-        body_weight
+        sleep_score
     FROM public.fct__other_rhythm_tracking
-    WHERE body_weight IS NOT NULL;
+    WHERE sleep_score IS NOT NULL;
 """, ttl="10m")
 
 ###########################
 ####### Title Page ########
 ###########################
 
-st.title("""💊 Health Tracker""")
+st.title("""💤 Sleep Tracker""")
 
 st.divider()
 
@@ -30,7 +30,7 @@ st.divider()
 ####### Data Cleaning ########
 ##############################
 
-body_weight_df['rhythm_date'] = pd.to_datetime(body_weight_df['rhythm_date'])
+df['rhythm_date'] = pd.to_datetime(df['rhythm_date'])
 
 ########################
 ####### Filters ########
@@ -45,30 +45,21 @@ start_dt = st.sidebar.date_input('From Date', value=default_start_date)
 end_dt = st.sidebar.date_input('To Date', value=default_end_date)
 
 # Filter the DataFrame to include only the selected date range
-body_weight_df = body_weight_df[
-    (body_weight_df['rhythm_date'] >= pd.to_datetime(start_dt)) &
-    (body_weight_df['rhythm_date'] <= pd.to_datetime(end_dt))
+df = df[
+    (df['rhythm_date'] >= pd.to_datetime(start_dt)) &
+    (df['rhythm_date'] <= pd.to_datetime(end_dt))
 ]
 
-####################################
-####### Body Weight Tracker ########
-####################################
+##############################
+####### Sleep Tracker ########
+##############################
 
-st.markdown("## Body Weight Over Time")
+st.markdown("## Sleep Score Over Time")
 
-chart_1 = alt.Chart(body_weight_df).mark_line().encode(
+chart_1 = alt.Chart(df).mark_line().encode(
     x = alt.X('rhythm_date'),
-    y = alt.Y('body_weight', scale=alt.Scale(domain=[140, 160]))
+    y = alt.Y('sleep_score')  # Let Altair handle the scale automatically
 )
 
 # Display the chart in Streamlit
 st.altair_chart(chart_1, use_container_width=True)
-
-#################################
-####### Last 5 Weigh Ins ########
-#################################
-
-st.markdown("## Last 5 Weigh Ins")
-
-# Display the table
-st.dataframe(body_weight_df.sort_values(by='rhythm_date', ascending=False).head(5), hide_index=True)

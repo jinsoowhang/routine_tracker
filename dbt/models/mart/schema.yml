@@ -88,6 +88,29 @@ models:
       - name: attribute_6
         description: "The attribute used to filter for gym-related data. Always equals 'gym'."
 
+  - name: fct__other_rhythm_tracking
+    description: |
+      This model tracks various personal data over time, including mood, sleep score, body weight, and highlights or lowlights, providing insights into personal trends and behaviors for health and wellness monitoring.
+    columns:
+      - name: rhythm_date
+        description: |
+          The date when the personal data was recorded. This helps in tracking trends over time.
+      - name: mood_score
+        description: |
+          The mood score recorded during the entry, measured on a numeric scale.
+      - name: sleep_score
+        description: |
+          The sleep score recorded during the entry, measured on a numeric scale.
+      - name: body_weight
+        description: |
+          The body weight recorded during the entry, measured in pounds (lbs).
+      - name: highlight
+        description: |
+          A significant positive experience recorded during the entry, often reflecting accomplishments or key moments.
+      - name: lowlight
+        description: |
+          A significant negative experience recorded during the entry, often reflecting challenges or setbacks.
+
   - name: fct__tennis_matches
     description: "Fact table for tennis matches, including match type (singles/doubles), score, and notes."
     columns:
@@ -128,20 +151,3 @@ models:
         description: The result of the match for the player ('Win' or 'Loss').
       - name: is_teammate
         description: A boolean indicating whether the player is a teammate (TRUE) or an opponent (FALSE).
-
-  - name: fct__weight_tracking
-    description: |
-      This model tracks body weight measurements over time, providing insights into weight trends and changes for fitness or health monitoring.
-    columns:
-      - name: weigh_in_date
-        description: |
-          The date when the body weight was recorded. This helps in tracking weight progression over time.
-        tests:
-          - not_null:
-              severity: warn
-      - name: body_weight
-        description: |
-          The body weight recorded during the weigh-in, measured in pounds (lbs).
-        tests:
-          - not_null:
-              severity: warn
