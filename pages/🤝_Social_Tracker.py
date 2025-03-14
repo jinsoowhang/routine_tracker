@@ -95,4 +95,15 @@ st.divider()
 
 st.markdown("### Social Table")
 
-st.dataframe(people_counts, use_container_width=True)
+# Calculate total interactions
+total_interactions = people_counts.sum()
+
+# Create a new DataFrame for display
+social_table_df = people_counts.reset_index()
+social_table_df.columns = ['Person', 'Count']
+
+# Add proportion column
+social_table_df['Proportion'] = (social_table_df['Count'] / total_interactions).round(2)
+
+# Display table
+st.dataframe(social_table_df, use_container_width=True)
