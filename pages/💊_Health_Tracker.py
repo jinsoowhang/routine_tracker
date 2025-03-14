@@ -10,7 +10,13 @@ st.set_page_config(layout='wide')
 conn = st.connection("postgresql", type="sql")
 
 # Perform query.
-body_weight_df = conn.query('SELECT * FROM fct__weight_tracking;', ttl="10m")
+body_weight_df = conn.query("""
+    SELECT 
+        rhythm_date,
+        body_weight
+    FROM public.fct__other_rhythm_tracking
+    WHERE body_weight IS NOT NULL;
+""", ttl="10m")
 
 ###########################
 ####### Title Page ########
@@ -24,7 +30,7 @@ st.divider()
 ####### Data Cleaning ########
 ##############################
 
-body_weight_df['weigh_in_date'] = pd.to_datetime(body_weight_df['weigh_in_date'])
+body_weight_df['rhythm_date'] = pd.to_datetime(body_weight_df['rhythm_date'])
 
 ########################
 ####### Filters ########
@@ -40,8 +46,8 @@ end_dt = st.sidebar.date_input('To Date', value=default_end_date)
 
 # Filter the DataFrame to include only the selected date range
 body_weight_df = body_weight_df[
-    (body_weight_df['weigh_in_date'] >= pd.to_datetime(start_dt)) &
-    (body_weight_df['weigh_in_date'] <= pd.to_datetime(end_dt))
+    (body_weight_df['rhythm_date'] >= pd.to_datetime(start_dt)) &
+    (body_weight_df['rhythm_date'] <= pd.to_datetime(end_dt))
 ]
 
 ####################################
@@ -51,7 +57,7 @@ body_weight_df = body_weight_df[
 st.markdown("## Body Weight Over Time")
 
 chart_1 = alt.Chart(body_weight_df).mark_line().encode(
-    x = alt.X('weigh_in_date'),
+    x = alt.X('rhythm_date'),
     y = alt.Y('body_weight', scale=alt.Scale(domain=[140, 160]))
 )
 
@@ -65,4 +71,4 @@ st.altair_chart(chart_1, use_container_width=True)
 st.markdown("## Last 5 Weigh Ins")
 
 # Display the table
-st.dataframe(body_weight_df.sort_values(by='weigh_in_date', ascending=False).head(5), hide_index=True)
+st.dataframe(body_weight_df.sort_values(by='rhythm_date', ascending=False).head(5), hide_index=True)
