@@ -35,8 +35,7 @@ class IngestDataToPostgres():
 
         # Connect to PostgreSQL
         engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{db}')
-        engine.raw_connection()
-
+        engine.connect()
 
         # Path to the rhythm files
         src_dir = os.path.abspath(os.path.join(current_file_path, 'data', 'raw_data', 'raw_rhythm_data'))
