@@ -1,12 +1,16 @@
 FROM python:3.9.1
 
-# Install required Python packages, including python-dotenv
-RUN pip install pandas gspread oauth2client sqlalchemy psycopg2 python-dotenv
-
 # Set the working directory
 WORKDIR /app
 
-# Copy all the files into the container
-COPY . /app
+# Copy requirements.txt first to leverage Docker cache
+COPY requirements.txt .
 
-ENTRYPOINT [ "python", "main.py" ]
+# Install dependencies from requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application files
+COPY . .
+
+# Set the entry point
+ENTRYPOINT ["python", "main.py"]
