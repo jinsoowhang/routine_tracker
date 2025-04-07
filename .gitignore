@@ -24,8 +24,32 @@ logs/
 # Ignore package manager files
 packages.yml
 
-# Ignore READ files
+# Ignore README files
 READ.md
 
 # Ignore .venv folder (virtual environment)
 .venv/
+
+# Ignore Python bytecode
+__pycache__/
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore Docker image files
+*.tar
+
+# Ignore Python packaging build files
+*.egg-info/
+*.dist-info/
+*.eggs/
+build/
+dist/
