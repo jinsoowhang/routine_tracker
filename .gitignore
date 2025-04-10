@@ -53,3 +53,7 @@ Thumbs.db
 *.eggs/
 build/
 dist/
+
+# Airflow files
+airflow.cfg
+airflow-webserver.pid
