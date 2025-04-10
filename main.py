@@ -16,6 +16,9 @@ import sys
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv(dotenv_path="/opt/airflow/.env")
+
 def main(args):
 
 
@@ -23,9 +26,7 @@ def main(args):
     ######################### EXTRACT RAW FINANCE DATA #########################
     ############################################################################
 
-
     current_file_path = os.getenv('LOCAL_FILE_PATH')
-
 
     # Initialize Finance Data
     data_extraction = DataExtraction()

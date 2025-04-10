@@ -1,9 +1,9 @@
 FROM python:3.9.1
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /opt/airflow
 
-# Copy requirements.txt first to leverage Docker cache
+# Copy the requirements.txt first to leverage Docker cache
 COPY requirements.txt .
 
 # Install dependencies from requirements.txt
