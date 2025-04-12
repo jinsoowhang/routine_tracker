@@ -9,7 +9,17 @@ with DAG(
     catchup=False,
 ) as dag:
 
+    # Task to run the Python script
     load_data = BashOperator(
-    task_id="load_data",
-    bash_command="pip install -r /opt/airflow/requirements.txt && python3 /opt/airflow/main.py --user=root --password=root --host=pg-database --port=5432 --db=rhythm || echo 'Python script failed'",
+        task_id="load_data",
+        bash_command="python3 /opt/airflow/main.py --user=root --password=root --host=pg-database --port=5432 --db=rhythm",
     )
+
+    # Task to run DBT
+    run_dbt = BashOperator(
+        task_id="run_dbt",
+        bash_command="cd /opt/airflow/dbt && dbt run",
+    )
+
+    # Set task dependencies (first run load_data, then run_dbt)
+    load_data >> run_dbt
