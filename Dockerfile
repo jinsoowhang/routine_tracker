@@ -1,16 +1,22 @@
-FROM python:3.9.1
+FROM apache/airflow:2.9.1-python3.10
 
 # Set the working directory
 WORKDIR /opt/airflow
 
-# Copy the requirements.txt first to leverage Docker cache
-COPY requirements.txt .
+# Switch to root user to install dependencies
+USER root
 
-# Install dependencies from requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Install git
+RUN apt-get update && apt-get install -y git
 
-# Copy the rest of the application files
-COPY . .
+# Switch back to airflow user
+USER airflow
 
-# Set the entry point
-ENTRYPOINT ["python", "main.py"]
+# Copy requirements.txt
+COPY requirements.txt /opt/airflow/requirements.txt
+
+# Install pip dependencies as airflow user
+RUN pip install --no-cache-dir -r /opt/airflow/requirements.txt
+
+# Copy the rest of your codebase
+COPY . /opt/airflow
