@@ -11,6 +11,7 @@ WITH source AS (
         "Location" AS job_location,
         "Link" AS application_link 
     FROM {{ source('staging', 'raw__professional') }}
+    WHERE "Status" IS NOT NULL
 ),
 
 combined_dates AS (

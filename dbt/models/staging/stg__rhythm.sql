@@ -1,7 +1,9 @@
 {{ config(materialized='table') }}
 
 WITH source AS (
-    SELECT * FROM {{ source('staging', 'raw__rhythm') }}
+    SELECT * 
+    FROM {{ source('staging', 'raw__rhythm') }}
+    WHERE date ~ '^\d{1,2}/\d{1,2}/\d{4}$'
 ),
 
 results AS (
