@@ -4,6 +4,8 @@ import numpy as np
 import altair as alt
 from datetime import datetime
 import matplotlib.pyplot as plt
+from datetime import datetime as dt
+from datetime import timedelta
 
 st.set_page_config(layout='wide')
 
@@ -11,7 +13,7 @@ st.set_page_config(layout='wide')
 conn = st.connection("postgresql", type="sql")
 
 # Perform query
-query = """
+query_1 = """
 SELECT 
     matches.gym_date AS match_date,
     results.player_name,
@@ -27,7 +29,20 @@ JOIN fct__tennis_matches matches
     ON results.match_id = matches.match_id;
 """
 
-tennis_results_df = conn.query(query, ttl="10m")
+query_2 = """
+SELECT 
+    gym_date AS match_date,
+    score,
+    teammate,
+    opponents,
+    match_type,
+    match_id
+FROM fct__tennis_matches
+"""
+
+tennis_results_df = conn.query(query_1, ttl="10m")
+
+tennis_match_results_df = conn.query(query_2, ttl="10m")
 
 ###########################
 ####### Title Page ########
@@ -37,11 +52,47 @@ st.title("""🎾Tennis Tracker""")
 
 st.divider()
 
+##############################
+####### Data Cleaning ########
+##############################
+
+tennis_results_df['match_date'] = pd.to_datetime(tennis_results_df['match_date'])
+tennis_match_results_df['match_date'] = pd.to_datetime(tennis_match_results_df['match_date'])
+
+# Calculate the default start and end dates
+default_end_date = dt.today()
+default_start_date = default_end_date - timedelta(days=365)
+
+# Add date input widgets with default values
+start_dt = st.sidebar.date_input('From Date', value=default_start_date)
+end_dt = st.sidebar.date_input('To Date', value=default_end_date)
+
+# Filter the DataFrame to include only the selected date range
+date_filtered_tennis_results_df = tennis_results_df[
+    (tennis_results_df['match_date'] >= pd.to_datetime(start_dt)) &
+    (tennis_results_df['match_date'] <= pd.to_datetime(end_dt))
+]
+
+date_filtered_tennis_match_results_df = tennis_match_results_df[
+    (tennis_match_results_df['match_date'] >= pd.to_datetime(start_dt)) &
+    (tennis_match_results_df['match_date'] <= pd.to_datetime(end_dt))
+]
+
+###################################
+####### Tennis Recent Form ########
+###################################
+
+st.title("""🎾Tennis Recent Form""")
+
+st.divider()
+
+st.dataframe(date_filtered_tennis_match_results_df)
+
 ####################################
 ####### Tennis Head to Head ########
 ####################################
 
-tennis_head2head_df = tennis_results_df.copy()
+tennis_head2head_df = date_filtered_tennis_results_df.copy()
 
 st.title("""🎾Tennis Head2Head""")
 
@@ -50,6 +101,7 @@ st.divider()
 # Define the columns and corresponding filter names
 filter_columns = {
     "Player Name": "player_name"
+    ,"Is Teammate": "is_teammate"
 }
 
 # Create the filters dynamically
