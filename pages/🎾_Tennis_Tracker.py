@@ -30,14 +30,17 @@ JOIN fct__tennis_matches matches
 """
 
 query_2 = """
-SELECT 
-    gym_date AS match_date,
-    score,
-    teammate,
-    opponents,
-    match_type,
-    match_id
-FROM fct__tennis_matches
+SELECT distinct
+    matches.gym_date AS match_date,
+    results.result,
+    matches.score,
+    matches.teammate,
+    matches.opponents,
+    matches.match_type,
+    matches.match_id
+FROM fct__tennis_matches matches
+LEFT JOIN fct__tennis_results results
+        ON results.match_id = matches.match_id;
 """
 
 tennis_results_df = conn.query(query_1, ttl="10m")
