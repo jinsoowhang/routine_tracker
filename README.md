@@ -2,7 +2,7 @@
 
 A Streamlit app to track and visualize lifestyle, wellness, growth, and social interactions over time
 
-![dashboard](/assets/images/about.PNG)
+![dashboard](/assets/images/about.png)
 
 ---
 
