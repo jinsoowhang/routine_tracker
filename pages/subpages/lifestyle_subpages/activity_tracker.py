@@ -5,8 +5,6 @@ import altair as alt
 from datetime import datetime as dt
 from datetime import timedelta
 
-st.set_page_config(layout='wide')
-
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
 
