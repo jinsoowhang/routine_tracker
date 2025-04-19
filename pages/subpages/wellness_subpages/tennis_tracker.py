@@ -10,6 +10,13 @@ conn = st.connection("postgresql", type="sql")
 
 def render_tennis_tracker(start_date, end_date, date_prefix=""):
 
+    ###########################
+    ####### Title Page ########
+    ###########################
+
+    st.title("""🎾 Tennis Tracker""")
+    st.divider()
+
     # Perform query
     query_1 = """
     SELECT 

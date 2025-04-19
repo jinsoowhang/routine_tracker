@@ -22,7 +22,7 @@ def render_sleep_tracker(shared_start_date, shared_end_date):
     ####### Title Page ########
     ###########################
 
-    st.title("""💤 Sleep Tracker""")
+    st.title("""😴 Sleep Tracker""")
     st.divider()
 
     ##############################
