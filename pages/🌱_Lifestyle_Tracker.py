@@ -4,6 +4,7 @@ from pages.subpages.lifestyle_subpages.habit_tracker import render_habit_tracker
 from datetime import datetime, timedelta
 
 # Page config
+st.set_page_config(layout='wide')
 st.title("🌱 Lifestyle Tracker")
 
 # Shared date filters in sidebar
