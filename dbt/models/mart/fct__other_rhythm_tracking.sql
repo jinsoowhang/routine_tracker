@@ -11,7 +11,15 @@ WITH raw AS (
 		CASE 
 		    WHEN notes ~ 'lowlight:\s*".+?"' 
 		    THEN REGEXP_REPLACE(notes, '.*lowlight:\s*"(.*?)".*', '\1', 'i') 
-		END AS lowlight
+		END AS lowlight,
+		CASE 
+			WHEN notes ~ 'dream:\s*".+?"' 
+			THEN REGEXP_REPLACE(notes, '.*dream:\s*"(.*?)".*', '\1', 'i') 
+		END AS dream,
+		CASE 
+			WHEN notes ~ 'lesson:\s*".+?"' 
+			THEN REGEXP_REPLACE(notes, '.*lesson:\s*"(.*?)".*', '\1', 'i') 
+		END AS lesson
 	FROM {{ ref('stg__rhythm') }}  -- Reference the staging model
 ),
 
@@ -22,7 +30,9 @@ results AS (
 		sleep_score,
 		body_weight,
 		highlight,
-		lowlight
+		lowlight,
+		dream,
+		lesson
 	FROM raw
 )
 

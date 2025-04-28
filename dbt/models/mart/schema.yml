@@ -44,10 +44,16 @@ models:
       - name: adj_day_num
         description: |
           The numeric representation of the day within the week (e.g., 1 for Monday, 7 for Sunday).
-      - name: adjusted_score
+      - name: total_daily_score
         description: |
           The aggregated activity score for all activities performed on a given date. 
           Higher scores indicate greater productivity or importance based on weighted activities.
+        tests:
+          - not_null:
+              severity: warn
+      - name: adjusted_score
+        description: |
+          The adjusted activity score calculated by a curve system.
         tests:
           - not_null:
               severity: warn
@@ -110,6 +116,12 @@ models:
       - name: lowlight
         description: |
           A significant negative experience recorded during the entry, often reflecting challenges or setbacks.
+      - name: dream
+        description: |
+          Recording dreams that occurred during the rhythm_date
+      - name: lesson
+        description: |
+          Recording lessons that were learned during the rhythm_date
 
   - name: fct__tennis_matches
     description: "Fact table for tennis matches, including match type (singles/doubles), score, and notes."

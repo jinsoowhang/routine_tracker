@@ -112,6 +112,7 @@ SELECT
     adj_year_week_num,
     adj_weekday,
     adj_day_num,
+    total_daily_score,
     ROUND(adjusted_score, 2) as adjusted_score
 FROM adjusted_scores
 
