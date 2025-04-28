@@ -64,6 +64,10 @@ def render_tennis_tracker(start_date, end_date, date_prefix=""):
         (tennis_match_results_df['match_date'] >= pd.to_datetime(start_date)) &
         (tennis_match_results_df['match_date'] <= pd.to_datetime(end_date))
     ]
+    
+    # Sort the filtered data by match_date in descending order
+    date_filtered_tennis_results_df = date_filtered_tennis_results_df.sort_values(by='match_date', ascending=False)
+    date_filtered_tennis_match_results_df = date_filtered_tennis_match_results_df.sort_values(by='match_date', ascending=False)
 
     st.markdown("## 🎾 Tennis Recent Form")
     st.dataframe(date_filtered_tennis_match_results_df)
