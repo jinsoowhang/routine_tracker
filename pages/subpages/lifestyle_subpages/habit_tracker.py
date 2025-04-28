@@ -49,13 +49,13 @@ def render_habit_tracker(start_dt=None, end_dt=None):
     ##########################
 
     # Group by adj_year_week_num to get weekly scores
-    weekly_activity_scores_df = daily_activity_scores_df.groupby('adj_year_week_num')['total_daily_score'].mean()
+    weekly_activity_scores_df = daily_activity_scores_df.groupby('adj_year_week_num')['adjusted_score'].mean()
 
     # Today vs One week ago scores
     today_date = dt.today().date()
     one_week_ago_date = today_date - timedelta(days=7)
-    today_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == today_date]['total_daily_score'].iloc[0]
-    one_week_ago_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == one_week_ago_date]['total_daily_score'].iloc[0]
+    today_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == today_date]['adjusted_score'].iloc[0]
+    one_week_ago_score = daily_activity_scores_df[daily_activity_scores_df['adj_rhythm_date'].dt.date == one_week_ago_date]['adjusted_score'].iloc[0]
 
     # This week vs Last week score
     this_week_num = today_date.strftime("%Y-W%U")  # Format as YYYY-Wxx
@@ -119,8 +119,8 @@ def render_habit_tracker(start_dt=None, end_dt=None):
     # Line Chart for daily score over time
     line_chart = alt.Chart(daily_activity_scores_df).mark_line().encode(
         x=alt.X('adj_rhythm_date:T'),
-        y=alt.Y('total_daily_score:Q', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
-        tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'total_daily_score:Q']
+        y=alt.Y('adjusted_score:Q', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
+        tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'adjusted_score:Q']
     )
 
     # Text labels
@@ -128,8 +128,8 @@ def render_habit_tracker(start_dt=None, end_dt=None):
         align='left', dx=-10, dy=-10, fontSize=12, color='white'
     ).encode(
         x=alt.X('adj_rhythm_date:T'),
-        y=alt.Y('total_daily_score:Q'),
-        text=alt.Text('total_daily_score:Q', format=".1f")
+        y=alt.Y('adjusted_score:Q'),
+        text=alt.Text('adjusted_score:Q', format=".1f")
     )
 
     # Vertical lines with adjustable shift
@@ -160,8 +160,8 @@ def render_habit_tracker(start_dt=None, end_dt=None):
             sort=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']  # Explicit order
         ),
         y=alt.Y('adj_year_week_num:N', title='Year-Week'),
-        color=alt.Color('total_daily_score:Q', scale=alt.Scale(scheme='redyellowgreen'), title='Daily Score'),
-        tooltip=['adj_year_week_num:N', 'adj_weekday:N', 'total_daily_score:Q']  # Tooltip for details
+        color=alt.Color('adjusted_score:Q', scale=alt.Scale(scheme='redyellowgreen'), title='Daily Score'),
+        tooltip=['adj_year_week_num:N', 'adj_weekday:N', 'adjusted_score:Q']  # Tooltip for details
     )
 
     # Text labels for each grid cell
@@ -171,7 +171,7 @@ def render_habit_tracker(start_dt=None, end_dt=None):
             sort=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']  # Explicit order
         ),
         y=alt.Y('adj_year_week_num:N'),
-        text=alt.Text('total_daily_score:Q', format=".0f")  # Format to display whole numbers
+        text=alt.Text('adjusted_score:Q', format=".0f")  # Format to display whole numbers
     )
 
     # Combine the heatmap and text labels
@@ -197,12 +197,12 @@ def render_habit_tracker(start_dt=None, end_dt=None):
     with col1:
         st.markdown("##### Average score by day")
         result = (
-            daily_activity_scores_df.groupby(['adj_weekday', 'adj_day_num'])['total_daily_score']
+            daily_activity_scores_df.groupby(['adj_weekday', 'adj_day_num'])['adjusted_score']
             .mean()
             .reset_index()  # Convert the Series to a DataFrame
             .sort_values(by='adj_day_num').reset_index()  # Sort by 'adj_day_num'
         )
-        st.dataframe(result[['adj_weekday', 'total_daily_score']])
+        st.dataframe(result[['adj_weekday', 'adjusted_score']])
 
     # Column 2: Average Score by Week
     with col2:

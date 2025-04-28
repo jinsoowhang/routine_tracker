@@ -44,7 +44,7 @@ models:
       - name: adj_day_num
         description: |
           The numeric representation of the day within the week (e.g., 1 for Monday, 7 for Sunday).
-      - name: total_daily_score
+      - name: adjusted_score
         description: |
           The aggregated activity score for all activities performed on a given date. 
           Higher scores indicate greater productivity or importance based on weighted activities.
