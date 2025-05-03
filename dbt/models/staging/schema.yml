@@ -47,6 +47,10 @@ models:
           description: Date on which the food was consumed.
           tests:
             - not_null
+        - name: food_activity
+          description: Cook or eat food activity from the notes field.
+        - name: meal_of_day
+          description: Meal of the day when the food was consumed (e.g., breakfast, lunch, dinner).
         - name: food
           description: Name of the food item extracted from the notes field.
         - name: restaurant
