@@ -37,6 +37,23 @@ models:
         - name: memo
           description: Additional notes or information about the transaction.
 
+    - name: stg__food
+      description: >
+        Staging model that extracts food and restaurant information from the notes field 
+        in the stg__rhythm table. Parses JSON-like strings to identify food consumed and 
+        associated restaurant, if any.
+      columns:
+        - name: rhythm_date
+          description: Date on which the food was consumed.
+          tests:
+            - not_null
+
+        - name: food
+          description: Name of the food item extracted from the notes field.
+
+        - name: restaurant
+          description: Name of the restaurant where the food was consumed, if provided.
+
     - name: stg__rhythm
       description: >
         15 minute interval time blocks to increase productivity 
