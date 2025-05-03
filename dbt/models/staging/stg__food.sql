@@ -16,7 +16,7 @@ WITH source AS (
         END AS restaurant
     FROM {{ ref('stg__rhythm') }}  -- Reference the staging model
     WHERE attribute_1 in ('eat', 'cook')
-      AND notes is not null
+      and (notes is not null AND notes !~ 'food:\s*""')  -- This filters out empty food fields
 )
 
 SELECT

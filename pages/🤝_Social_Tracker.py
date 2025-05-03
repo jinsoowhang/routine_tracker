@@ -1,10 +1,14 @@
 import streamlit as st
+
+# Set page config FIRST — before any other Streamlit code runs
+st.set_page_config(layout="wide", page_title="Social Tracker")
+
+# Import necessary libraries
 from pages.subpages.social_subpages.connections_tracker import render_connections_tracker
 from datetime import datetime, timedelta
 
 # Page config
-st.set_page_config(layout='wide')
-st.title("📈 Growth Tracker")
+st.title("🤝 Social Tracker")
 
 # Shared date filters in sidebar
 st.sidebar.markdown("## Date Filters")

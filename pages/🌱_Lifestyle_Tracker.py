@@ -1,4 +1,9 @@
 import streamlit as st
+
+# Set page config FIRST — before any other Streamlit code runs
+st.set_page_config(layout="wide", page_title="Lifestyle Tracker")
+
+# Import necessary libraries
 from pages.subpages.lifestyle_subpages.activity_tracker import render_activity_tracker
 from pages.subpages.lifestyle_subpages.habit_tracker import render_habit_tracker
 from pages.subpages.lifestyle_subpages.journal_tracker import render_journal_tracker  # Import for journal tracker

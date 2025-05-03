@@ -1,10 +1,14 @@
 import streamlit as st
+
+# Set page config FIRST — before any other Streamlit code runs
+st.set_page_config(layout="wide", page_title="Growth Tracker")
+
+# Import necessary libraries
 from pages.subpages.growth_subpages.finance_tracker import render_finance_tracker
 from pages.subpages.growth_subpages.professional_tracker import render_professional_tracker
 from datetime import datetime, timedelta
 
 # Page config
-st.set_page_config(layout='wide')
 st.title("📈 Growth Tracker")
 
 # Shared date filters in sidebar
