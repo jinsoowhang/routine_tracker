@@ -7,8 +7,6 @@ conn = st.connection("postgresql", type="sql")
 
 def render_journal_tracker(start_dt, end_dt):
     # Perform query
-    journal_df = conn.query('SELECT * FROM fct__other_rhythm_tracking;', ttl="10m")
-
     journal_df = conn.query("""
         SELECT 
             rhythm_date,
@@ -16,7 +14,7 @@ def render_journal_tracker(start_dt, end_dt):
             lowlight,
             dream,
             lesson
-        FROM fct__other_rhythm_tracking;
+        FROM stg__journal;
     """, ttl="10m")
 
     ###########################

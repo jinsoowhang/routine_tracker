@@ -14,7 +14,7 @@ def render_sleep_tracker(shared_start_date, shared_end_date):
         SELECT 
             rhythm_date,
             sleep_score
-        FROM public.fct__other_rhythm_tracking
+        FROM public.stg__journal
         WHERE sleep_score IS NOT NULL;
     """, ttl="10m")
 

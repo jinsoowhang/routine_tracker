@@ -14,7 +14,7 @@ def render_body_weight_tracker(shared_start_date, shared_end_date):
         SELECT 
             rhythm_date,
             body_weight
-        FROM public.fct__other_rhythm_tracking
+        FROM public.stg__journal
         WHERE body_weight IS NOT NULL;
     """, ttl="10m")
 
