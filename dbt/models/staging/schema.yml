@@ -37,6 +37,112 @@ models:
         - name: memo
           description: Additional notes or information about the transaction.
 
+    - name: stg__food
+      description: >
+        Staging model that extracts food and restaurant information from the notes field 
+        in the stg__rhythm table. Parses JSON-like strings to identify food consumed and 
+        associated restaurant, if any.
+      columns:
+        - name: rhythm_date
+          description: Date on which the food was consumed.
+          tests:
+            - not_null
+        - name: food_activity
+          description: Cook or eat food activity from the notes field.
+        - name: meal_of_day
+          description: Meal of the day when the food was consumed (e.g., breakfast, lunch, dinner).
+        - name: food
+          description: Name of the food item extracted from the notes field.
+        - name: restaurant
+          description: Name of the restaurant where the food was consumed, if provided.
+
+    - name: stg__gym
+      description: >
+        15 minute interval time blocks to increase productivity 
+        and minimize cognitive load of remembering what and when activities
+        need to be completed
+      columns:
+        - name: activity_id
+          description: This is the table's unique ID
+          tests:
+            - not_null:
+                severity: warn
+        - name: Day
+          description: Weekday of the date of activity
+        - name: Day_num 
+          description: Weekday number of the date of activity
+        - name: Date 
+          description: Date of activity
+        - name: Hour 
+          description: The time of the activity
+        - name: Activity 
+          description: Concatenation of activity from Attribute_1 and Attribute_2
+        - name: Attribute_1 
+          description: Main category of activity
+        - name: Attribute_2
+          description: Secondary category of activity
+        - name: Attribute_3
+          description: Third category of activity
+        - name: Attribute_4
+          description: Fourth category of activity
+        - name: Attribute_5
+          description: Fifth category of activity
+        - name: Attribute_6
+          description: Sixth category of activity
+        - name: Notes
+          description: additional notes of activity
+
+    - name: stg__journal
+      description: |
+        This model tracks various personal data over time, including mood, sleep score, body weight, and highlights or lowlights, providing insights into personal trends and behaviors for health and wellness monitoring.
+      columns:
+        - name: rhythm_date
+          description: |
+            The date when the personal data was recorded. This helps in tracking trends over time.
+        - name: mood_score
+          description: |
+            The mood score recorded during the entry, measured on a numeric scale.
+        - name: sleep_score
+          description: |
+            The sleep score recorded during the entry, measured on a numeric scale.
+        - name: body_weight
+          description: |
+            The body weight recorded during the entry, measured in pounds (lbs).
+        - name: highlight
+          description: |
+            A significant positive experience recorded during the entry, often reflecting accomplishments or key moments.
+        - name: lowlight
+          description: |
+            A significant negative experience recorded during the entry, often reflecting challenges or setbacks.
+        - name: dream
+          description: |
+            Recording dreams that occurred during the rhythm_date
+        - name: lesson
+          description: |
+            Recording lessons that were learned during the rhythm_date
+
+    - name: stg__professional
+      description: "A fact table that tracks professional status, including application phase, year applied, and associated details."
+      columns:
+        - name: application_id
+          description: "Unique Identifier based on the appplication_link"
+        - name: application_status
+          description: "The current status of the professional in the application process (e.g., applied, interviewed, hired)."
+        - name: application_phase
+          description: "The phase number of the application process (e.g., Round 1, Round 2)."
+        - name: application_phase_desc
+          description: "The description of the phase of the application process (e.g., technical interview, behavioral interview)."
+        - name: application_date
+          description: "The date the application was submitted."
+        - name: company_name
+          description: "The name of the company where the application was submitted."
+        - name: job_title
+          description: "The title of the job applied for."
+        - name: job_location
+          description: "The location of the job opportunity."
+        - name: application_link
+          description: "A link to the job posting or relevant application details."
+
     - name: stg__rhythm
       description: >
         15 minute interval time blocks to increase productivity 
@@ -83,61 +189,3 @@ models:
           description: 2 hours behind actual adj_date
         - name: adj_hour
           description: 2 hours behind actual adj_hour
-    
-    - name: stg__professional
-      description: "A fact table that tracks professional status, including application phase, year applied, and associated details."
-      columns:
-        - name: application_id
-          description: "Unique Identifier based on the appplication_link"
-        - name: application_status
-          description: "The current status of the professional in the application process (e.g., applied, interviewed, hired)."
-        - name: application_phase
-          description: "The phase number of the application process (e.g., Round 1, Round 2)."
-        - name: application_phase_desc
-          description: "The description of the phase of the application process (e.g., technical interview, behavioral interview)."
-        - name: application_date
-          description: "The date the application was submitted."
-        - name: company_name
-          description: "The name of the company where the application was submitted."
-        - name: job_title
-          description: "The title of the job applied for."
-        - name: job_location
-          description: "The location of the job opportunity."
-        - name: application_link
-          description: "A link to the job posting or relevant application details."
-
-    - name: stg__gym
-      description: >
-        15 minute interval time blocks to increase productivity 
-        and minimize cognitive load of remembering what and when activities
-        need to be completed
-      columns:
-        - name: activity_id
-          description: This is the table's unique ID
-          tests:
-            - not_null:
-                severity: warn
-        - name: Day
-          description: Weekday of the date of activity
-        - name: Day_num 
-          description: Weekday number of the date of activity
-        - name: Date 
-          description: Date of activity
-        - name: Hour 
-          description: The time of the activity
-        - name: Activity 
-          description: Concatenation of activity from Attribute_1 and Attribute_2
-        - name: Attribute_1 
-          description: Main category of activity
-        - name: Attribute_2
-          description: Secondary category of activity
-        - name: Attribute_3
-          description: Third category of activity
-        - name: Attribute_4
-          description: Fourth category of activity
-        - name: Attribute_5
-          description: Fifth category of activity
-        - name: Attribute_6
-          description: Sixth category of activity
-        - name: Notes
-          description: additional notes of activity
