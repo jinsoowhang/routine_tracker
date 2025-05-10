@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: dim__social_categories
+    description: >
+      This model processes rhythm data by splitting the 'people' field and labeling each individual
+      with a social_type such as hometown, family, tennis, church, college, coworkers, or others.
+    columns:
+      - name: rhythm_date
+        description: The date associated with the activity.
+        tests:
+          - not_null
+      - name: attribute_1
+        description: Primary category of the activity.
+      - name: attribute_2
+        description: Secondary category of the activity.
+      - name: places
+        description: The places associated with the activity.
+      - name: people
+        description: Original list of people involved in the activity (comma-separated string).
+      - name: individuals
+        description: Individual person name parsed from the people field.
+      - name: social_type
+        description: Labeled group/category based on individuals and activity context.
