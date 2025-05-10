@@ -17,6 +17,7 @@ docker-compose.yml
 target/
 dbt_packages/
 logs/
+/dbt/models/private/*
 
 # Ignore .streamlit folder
 .streamlit/
