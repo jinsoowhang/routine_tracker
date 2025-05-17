@@ -19,6 +19,7 @@ spreadsheet_key = os.getenv('SPREADSHEET_KEY')
 tab_life = os.getenv('TAB_LIFE')
 tab_gym = os.getenv('TAB_GYM')
 tab_professional = os.getenv('TAB_PROFESSIONAL')
+tab_todo = os.getenv('TAB_TODO')
 
 
 current_file_path = os.getenv('LOCAL_FILE_PATH')
@@ -54,6 +55,7 @@ class ImportGoogleSheets():
         raw_df = self.fetch_sheet_data(spreadsheet_key, tab_life)
         gym_df = self.fetch_sheet_data(spreadsheet_key, tab_gym)
         professional_df = self.fetch_sheet_data(spreadsheet_key, tab_professional)
+        todo_df = self.fetch_sheet_data(spreadsheet_key, tab_todo)
 
 
         # Ignore placeholder data in raw_df
@@ -65,6 +67,7 @@ class ImportGoogleSheets():
         raw_df = raw_df.astype(str)
         gym_df = gym_df.astype(str)
         professional_df = professional_df.astype(str)
+        todo_df = todo_df.astype(str)
 
 
         # Concatenate historical and new data (check for empty DataFrames to avoid issues)
@@ -95,8 +98,12 @@ class ImportGoogleSheets():
         else:
             print("No data to save for raw__professional.csv")
 
+        if not todo_df.empty:
+            todo_data_path = os.path.join(current_file_path, "data", "raw_data", "raw_rhythm_data", "raw__todo.csv")
+            todo_df.to_csv(todo_data_path, index=False)
+        else:
+            print("No data to save for raw__todo.csv")
 
         print(f'Rhythm data imported to csv file')
 
-
-        return combined_df, gym_df, professional_df
+        return combined_df, gym_df, professional_df, todo_df

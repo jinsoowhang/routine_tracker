@@ -25,12 +25,14 @@ class IngestDataToPostgres():
         gym_table_name = 'raw__gym'
         professional_table_name = 'raw__professional'
         finance_table_name = 'raw__finance'
+        todo_table_name = 'raw__todo'
 
 
         rhythm_file_name = f'{rhythm_table_name}.csv'
         gym_file_name = f'{gym_table_name}.csv'
         professional_file_name = f'{professional_table_name}.csv'
         finance_file_name = 'all_clean_data_spend.csv'
+        todo_file_name = f'{todo_table_name}.csv'
 
 
         # Connect to PostgreSQL
@@ -54,6 +56,11 @@ class IngestDataToPostgres():
         professional_file_path = os.path.join(src_dir, professional_file_name)
         professional_df = pd.read_csv(professional_file_path, low_memory=False)
         professional_df.to_sql(name=professional_table_name, con=engine, if_exists='replace')
+
+        # Load todo data
+        todo_file_path = os.path.join(src_dir, todo_file_name)
+        todo_df = pd.read_csv(todo_file_path, low_memory=False)
+        todo_df.to_sql(name=todo_table_name, con=engine, if_exists='replace')
 
         print(f'Rhythm data replaced in PostgreSQL')
 
