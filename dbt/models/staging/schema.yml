@@ -12,6 +12,7 @@ sources:
       - name: raw__rhythm
       - name: raw__gym
       - name: raw__professional
+      - name: raw__todo
          # freshness:
            # error_after: {count: 6, period: hour}
 
@@ -189,3 +190,23 @@ models:
           description: 2 hours behind actual adj_date
         - name: adj_hour
           description: 2 hours behind actual adj_hour
+
+    - name: stg__todo
+      description: "Staging model for todo tasks sourced from raw__rhythm"
+      columns:
+        - name: todo_id
+          description: "Unique identifier for the todo task"
+        - name: creation_date
+          description: "Date the task was created"
+        - name: category
+          description: "Category of the task"
+        - name: description
+          description: "Description of the task"
+        - name: status
+          description: "Status of the task (e.g., Done, In Progress)"
+        - name: priority
+          description: "Priority level of the task"
+        - name: completion_date
+          description: "Date the task was completed"
+        - name: notes
+          description: "Additional notes or context for the task"
