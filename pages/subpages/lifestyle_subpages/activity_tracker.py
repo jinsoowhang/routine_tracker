@@ -199,8 +199,15 @@ def render_activity_tracker(start_dt, end_dt):  # Accept date filters as argumen
         proportion_df['total_days'] = round(proportion_df['total_hours'] / 24)
         proportion_df['proportion (%)'] = round(proportion_df['count'] / proportion_df['count'].sum() * 100, 1)
         
+        # Calculate last activity (smallest days_since_rhythm_date)
+        last_occurrence_df = df.groupby(activity_column)['days_since_rhythm_date'].max().reset_index()
+        last_occurrence_df.rename(columns={'days_since_rhythm_date': 'days_since_last'}, inplace=True)
+
+        # Merge last occurrence into proportion_df
+        proportion_df = proportion_df.merge(last_occurrence_df, on=activity_column, how='left')
+
         # Reorder columns
-        return proportion_df[[activity_column, 'total_hours', 'total_days', 'proportion (%)']]
+        return proportion_df[[activity_column, 'days_since_last', 'total_hours', 'total_days', 'proportion (%)']]
 
     # Display Proportion by Activity Hierarchy
     st.markdown("#### Proportion by Activity Hierarchy")
