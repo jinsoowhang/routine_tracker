@@ -119,8 +119,7 @@ def render_habit_tracker(start_dt=None, end_dt=None):
     # Line Chart for daily score over time
     line_chart = alt.Chart(daily_activity_scores_df).mark_line().encode(
         x=alt.X('adj_rhythm_date:T'),
-        y=alt.Y('adjusted_score:Q', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score'),
-        tooltip=['adj_rhythm_date:T', 'adj_weekday:N', 'adj_year_week_num:N', 'adjusted_score:Q']
+        y=alt.Y('adjusted_score:Q', scale=alt.Scale(domain=[0, 120]), title='Total Daily Score')
     )
 
     # Text labels
@@ -137,8 +136,19 @@ def render_habit_tracker(start_dt=None, end_dt=None):
         x='adj_rhythm_date:T'
     )
 
+    hover_points = alt.Chart(daily_activity_scores_df).mark_circle(opacity=0).encode(
+        x='adj_rhythm_date:T',
+        y='adjusted_score:Q',
+        tooltip=[
+            'adj_rhythm_date:T',
+            'adj_weekday:N',
+            'adj_year_week_num:N',
+            'adjusted_score:Q'
+        ]
+    )
+
     # Combine all elements
-    chart_1 = (line_chart + labels + vlines).properties(
+    chart_1 = (line_chart + labels + vlines + hover_points).properties(
         title="Daily Score Over Time",
         width=800,
         height=400
