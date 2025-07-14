@@ -122,6 +122,7 @@ def render_activity_tracker(start_dt, end_dt):  # Accept date filters as argumen
         "commute": "#778899",  
         "cook": "#FF7F50",  
         "vacation": "#A9A9A9",  
+        "travel": "#A9A9A9", 
         "leisure": "#FF4500",  
         "hangout": "#FF6A6A",  
 
