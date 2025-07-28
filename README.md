@@ -7,7 +7,7 @@ A Streamlit app to track and visualize lifestyle, wellness, growth, and social i
 ---
 
 ### About the App
-- **Tech Stack:** Docker, Airflow, dbt, Streamlit, PostgreSQL, PGAdmin, Google Sheets
+- **Tech Stack:** OpenAI, Docker, Airflow, dbt, Streamlit, PostgreSQL, PGAdmin, Google Sheets
 - **Data Flow:**
   - Using an Airflow DAG, it pulls data from multiple Google Sheets into PostgreSQL.
   - Data transformation is done using dbt.
