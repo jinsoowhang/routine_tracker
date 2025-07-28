@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import altair as alt
 from datetime import datetime as dt
+from src.helpers.openai_helper import ask_openai_chat
 
 def render_connections_tracker(shared_start_date, shared_end_date):
     # Initialize connection.
@@ -96,3 +97,26 @@ def render_connections_tracker(shared_start_date, shared_end_date):
     # Display the updated social table
     st.dataframe(social_table_df[['individuals', 'social_type', 'Hours', 'Proportion']].sort_values(by='Hours', ascending=False), use_container_width=True)
 
+    #####################
+    ###### Ask AI #######
+    #####################
+
+    st.markdown("## 💬 Ask AI Assistant")
+
+    ask_ai_key = 'ask_ai_button_social_tracker'
+
+    user_question = st.text_input(
+                        "Enter your question (e.g. 'Who do I hangout the most with?')",
+                        key=f'{ask_ai_key}_1'
+                        )
+
+    if st.button("Ask AI", key=f'{ask_ai_key}_2'):
+        if not user_question:
+            st.warning("Please enter a question.")
+        elif rhythm_df.empty:
+            st.warning("No journal data available to provide context.")
+        else:
+            with st.spinner("Getting AI response..."):
+                answer = ask_openai_chat(user_question, context_df=rhythm_df)
+            st.success("AI response:")
+            st.write(answer)
