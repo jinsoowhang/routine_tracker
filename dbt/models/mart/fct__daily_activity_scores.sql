@@ -37,8 +37,9 @@ activity_score_cte AS (
         attribute_1,
         CASE 
             WHEN attribute_1 = 'love' THEN 3.0
-            WHEN attribute_1 = 'study' THEN 2.6
-            WHEN attribute_1 = 'side_hustle' THEN 2.4
+            WHEN attribute_1 = 'dating' THEN 2.5
+            WHEN attribute_1 = 'study' THEN 2.5
+            WHEN attribute_1 = 'side_hustle' THEN 2.3
             WHEN attribute_1 = 'read' THEN 2.2
             WHEN attribute_1 = 'work' THEN 2.0
             WHEN attribute_1 = 'exercise' THEN 1.9
