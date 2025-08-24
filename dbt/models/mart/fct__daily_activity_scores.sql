@@ -52,6 +52,7 @@ activity_score_cte AS (
             WHEN attribute_1 = 'walk' THEN 1.0
             WHEN attribute_1 = 'grocery' THEN 1.0
             WHEN attribute_1 = 'clean' THEN 1.0
+            WHEN attribute_1 = 'no tracking' then 0.70
             WHEN attribute_1 = 'eat' THEN 0.65
             WHEN attribute_1 = 'shopping' THEN 0.65 
             WHEN attribute_1 = 'hygiene' THEN 0.65
